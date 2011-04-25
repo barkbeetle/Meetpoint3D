@@ -37,11 +37,8 @@ function setupScene()
 	
 	//cubeNode = MojitoLoader.parseMojito(ResourceManager.data.cube1);
     
-    var cube = Mp3D.createCube();
-	cubeNode = new Node();
-	cubeNode.model = cube;
-	
-	cubeAngle = 0;
+	cubeNode = createCubeNode();
+	mat4.translate(cubeNode.transformation, [0, 0, -7]);
 
 	world.nodes.push(cubeNode);
 	
@@ -65,12 +62,136 @@ function main()
 
 	timeBefore = timeNow;
 
-	cubeAngle += Mp3D.degToRad(50)*elapsed;
-	
-	mat4.identity(cubeNode.transformation);
-	mat4.translate(cubeNode.transformation, [0, 0, -7]);
-	mat4.rotate(cubeNode.transformation, cubeAngle, [2, 1, 1]);
+	mat4.rotate(cubeNode.transformation, Mp3D.degToRad(50)*elapsed, [2, 1, 1]);
 
 	Mp3D.drawScene();
 	requestAnimFrame(main);
 }
+
+function createCubeNode()
+{
+	// cube
+	var model = new Model();
+	
+	var modelVertices = [
+		// front face
+		-1.0, -1.0,  1.0,
+		 1.0, -1.0,  1.0,
+		 1.0,  1.0,  1.0,
+		-1.0,  1.0,  1.0,
+		// back face
+		-1.0, -1.0, -1.0,
+		-1.0,  1.0, -1.0,
+		 1.0,  1.0, -1.0,
+		 1.0, -1.0, -1.0,
+		// top face
+		-1.0,  1.0, -1.0,
+		-1.0,  1.0,  1.0,
+		 1.0,  1.0,  1.0,
+		 1.0,  1.0, -1.0,
+		// bottom face
+		-1.0, -1.0, -1.0,
+		 1.0, -1.0, -1.0,
+		 1.0, -1.0,  1.0,
+		-1.0, -1.0,  1.0,
+		// right face
+		 1.0, -1.0, -1.0,
+		 1.0,  1.0, -1.0,
+		 1.0,  1.0,  1.0,
+		 1.0, -1.0,  1.0,
+		// left face
+		-1.0, -1.0, -1.0,
+		-1.0, -1.0,  1.0,
+		-1.0,  1.0,  1.0,
+		-1.0,  1.0, -1.0
+	];
+    model.setVertexPositions(modelVertices);
+    
+	var modelNormals = [
+      // Front face
+       0.0,  0.0,  1.0,
+       0.0,  0.0,  1.0,
+       0.0,  0.0,  1.0,
+       0.0,  0.0,  1.0,
+      // Back face
+       0.0,  0.0, -1.0,
+       0.0,  0.0, -1.0,
+       0.0,  0.0, -1.0,
+       0.0,  0.0, -1.0,
+      // Top face
+       0.0,  1.0,  0.0,
+       0.0,  1.0,  0.0,
+       0.0,  1.0,  0.0,
+       0.0,  1.0,  0.0,
+      // Bottom face
+       0.0, -1.0,  0.0,
+       0.0, -1.0,  0.0,
+       0.0, -1.0,  0.0,
+       0.0, -1.0,  0.0,
+      // Right face
+       1.0,  0.0,  0.0,
+       1.0,  0.0,  0.0,
+       1.0,  0.0,  0.0,
+       1.0,  0.0,  0.0,
+      // Left face
+      -1.0,  0.0,  0.0,
+      -1.0,  0.0,  0.0,
+      -1.0,  0.0,  0.0,
+      -1.0,  0.0,  0.0
+    ];
+    model.setVertexNormals(modelNormals);
+    
+	var modelTexCoords = [
+		// Front face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		// Back face
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		// Top face
+		0.0, 1.0,
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		// Bottom face
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		1.0, 0.0,
+		// Right face
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0,
+		0.0, 0.0,
+		// Left face
+		0.0, 0.0,
+		1.0, 0.0,
+		1.0, 1.0,
+		0.0, 1.0
+    ];
+    model.setVertexTexCoords(modelTexCoords);
+    
+    var modelIndices = [
+      0,   1,  2,    0,  2,  3,	// front face
+      4,   5,  6,    4,  6,  7,	// back face
+      8,   9, 10,    8, 10, 11,	// top face
+      12, 13, 14,   12, 14, 15,	// bottom face
+      16, 17, 18,   16, 18, 19,	// right face
+      20, 21, 22,   20, 22, 23	// left face
+    ];
+    model.setVertexIndices(modelIndices);
+    
+    model.setTexture("res/cube1.png");
+	model.shaderProgram = Mp3D.simpleShader;
+	
+	var modelNode = new Node();
+	modelNode.model = model;
+	
+	return modelNode;
+}
+
+
