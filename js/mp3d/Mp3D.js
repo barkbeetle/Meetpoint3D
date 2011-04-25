@@ -1,6 +1,7 @@
 Mp3D = new Object();
 
 Mp3D.readyFunctions = new Array();
+Mp3D.mvStack = new Array();
 
 Mp3D.ready = function(func)
 {
@@ -78,6 +79,7 @@ Mp3D.setupViewport = function()
 	Mp3D.gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
 	
 	Mp3D.mvMatrix = mat4.create();
+	mat4.identity(Mp3D.mvMatrix);
   	Mp3D.pMatrix = mat4.create();
 	
 	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 100.0, Mp3D.pMatrix);
@@ -171,6 +173,18 @@ Mp3D.handleLoadedTexture = function(texture)
 	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
 }
 
+Mp3D.pushMV = function()
+{
+	var newMV = mat4.create();
+	mat4.set(Mp3D.mvMatrix, newMV)
+	Mp3D.mvStack.push(newMV);
+}
+
+Mp3D.popMV = function()
+{
+	mat4.set(Mp3D.mvStack.pop(), Mp3D.mvMatrix);
+}
+
 Mp3D.setMatrixUniforms = function()
 {
 	// set modelview and projection matrix
@@ -197,11 +211,8 @@ Mp3D.drawScene = function()
 	// clear screen
 	Mp3D.gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
-	$.each(Mp3D.activeWorld.models, function()
+	$.each(Mp3D.activeWorld.nodes, function()
 	{
-		Mp3D.gl.useProgram(this.shaderProgram);
-		mat4.set(this.transformation, Mp3D.mvMatrix);
-		Mp3D.setMatrixUniforms();
 		this.draw();
 	});
 }

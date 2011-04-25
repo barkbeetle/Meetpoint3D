@@ -7,7 +7,6 @@ function Model()
 	this.vertexIndexBuffer = Mp3D.gl.createBuffer();
 	this.texture = null;
 	this.shaderProgram = null;
-	this.transformation = mat4.create();
 }
 
 Model.prototype.setVertexPositions = function(vertexPositions)
@@ -62,6 +61,8 @@ Model.prototype.setTexture = function(filename)
 
 Model.prototype.draw = function()
 {
+	Mp3D.gl.useProgram(this.shaderProgram);
+
 	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexPositionBuffer);
     Mp3D.gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, this.vertexPositionBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
     

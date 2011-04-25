@@ -10,9 +10,11 @@
 		<script type="text/javascript" src="js/glMatrix-0.9.5.min.js"></script>
 		<script type="text/javascript" src="js/mp3d/ResourceManager.js"></script>
 		<script type="text/javascript" src="js/mp3d/Mp3D.js"></script>
+		<script type="text/javascript" src="js/mp3d/Node.js"></script>
 		<script type="text/javascript" src="js/mp3d/Model.js"></script>
 		<script type="text/javascript" src="js/mp3d/World.js"></script>
 		<script type="text/javascript" src="js/mp3d/Light.js"></script>
+		<script type="text/javascript" src="js/mp3d/MojitoLoader.js"></script>
 		<script type="text/javascript" src="js/mp3d/script1.js"></script>
 	</head>
 	<body>

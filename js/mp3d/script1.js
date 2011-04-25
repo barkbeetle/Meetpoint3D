@@ -35,12 +35,15 @@ function setupScene()
 	
 	world.lights.push(light);
 	
-	// cube
-	//cube = Mp3D.parseMojito(ResourceManager.data.cube1);
+	//cubeNode = MojitoLoader.parseMojito(ResourceManager.data.cube1);
     
-    cube = Mp3D.createCube();
-    cubeAngle = 0;
-	world.models.push(cube);
+    var cube = Mp3D.createCube();
+	cubeNode = new Node();
+	cubeNode.model = cube;
+	
+	cubeAngle = 0;
+
+	world.nodes.push(cubeNode);
 	
 	startGame();
 }
@@ -64,9 +67,9 @@ function main()
 
 	cubeAngle += Mp3D.degToRad(50)*elapsed;
 	
-	mat4.identity(cube.transformation);
-	mat4.translate(cube.transformation, [0, 0, -7]);
-	mat4.rotate(cube.transformation, cubeAngle, [2, 1, 1]);
+	mat4.identity(cubeNode.transformation);
+	mat4.translate(cubeNode.transformation, [0, 0, -7]);
+	mat4.rotate(cubeNode.transformation, cubeAngle, [2, 1, 1]);
 
 	Mp3D.drawScene();
 	requestAnimFrame(main);
