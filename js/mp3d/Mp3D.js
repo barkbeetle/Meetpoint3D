@@ -82,7 +82,7 @@ Mp3D.setupViewport = function()
 	mat4.identity(Mp3D.mvMatrix);
   	Mp3D.pMatrix = mat4.create();
 	
-	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 100.0, Mp3D.pMatrix);
+	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 10000.0, Mp3D.pMatrix);
 }
 
 Mp3D.loadShaders = function()

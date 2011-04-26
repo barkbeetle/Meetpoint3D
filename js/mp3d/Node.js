@@ -26,3 +26,24 @@ Node.prototype.draw = function()
 	
 	Mp3D.popMV();
 }
+
+Node.prototype.append = function(node)
+{
+	this.children.push(node);
+}
+
+Node.prototype.translate = function(vector)
+{
+	mat4.translate(this.transformation, vector);
+}
+
+Node.prototype.scale = function(vector)
+{
+	mat4.scale(this.transformation, vector);
+}
+
+Node.prototype.rotate = function(angle, axis)
+{
+	mat4.rotate(this.transformation, angle, axis);
+}
+
