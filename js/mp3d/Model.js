@@ -62,6 +62,7 @@ Model.prototype.setTexture = function(filename)
 Model.prototype.draw = function()
 {
 	Mp3D.gl.useProgram(this.shaderProgram);
+	Mp3D.setMatrixUniforms(this.shaderProgram);
 
 	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexPositionBuffer);
     Mp3D.gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, this.vertexPositionBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
@@ -76,7 +77,7 @@ Model.prototype.draw = function()
     {
 		Mp3D.gl.activeTexture(WebGLRenderingContext.TEXTURE0);
     	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.texture);
-    	Mp3D.gl.uniform1i(Mp3D.simpleShader.samplerUniform, 0);
+    	Mp3D.gl.uniform1i(this.shaderProgram.samplerUniform, 0);
     }
 
  	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, this.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);

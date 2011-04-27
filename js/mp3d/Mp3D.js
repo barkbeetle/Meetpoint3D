@@ -11,9 +11,9 @@ Mp3D.ready = function(func)
 Mp3D.init = function()
 {
 	// register all resources needed for setup
-	ResourceManager.addRequest("simpleVertexShader", "res/shaders/simpleShader.vert");
-	ResourceManager.addRequest("simpleFragmentShader", "res/shaders/simpleShader.frag");
-	ResourceManager.addDependencies(["simpleVertexShader", "simpleFragmentShader"], Mp3D.setup);
+	ResourceManager.addRequest("simpleTextureVertexShader", "res/shaders/simpleTextureShader.vert");
+	ResourceManager.addRequest("simpleTextureFragmentShader", "res/shaders/simpleTextureShader.frag");
+	ResourceManager.addDependencies(["simpleTextureVertexShader", "simpleTextureFragmentShader"], Mp3D.setup);
 	ResourceManager.loadAll();
 }
 
@@ -87,39 +87,39 @@ Mp3D.setupViewport = function()
 
 Mp3D.loadShaders = function()
 {
-	// simple shader
-	var simpleVertexShader = Mp3D.loadVertexShader("simpleVertexShader");
-	var simpleFragmentShader = Mp3D.loadFragmentShader("simpleFragmentShader");
+	// simple texture shader
+	var simpleVertexShader = Mp3D.loadVertexShader("simpleTextureVertexShader");
+	var simpleFragmentShader = Mp3D.loadFragmentShader("simpleTextureFragmentShader");
 		
-	var simpleShaderProgram = Mp3D.gl.createProgram();
-    Mp3D.gl.attachShader(simpleShaderProgram, simpleVertexShader);
-    Mp3D.gl.attachShader(simpleShaderProgram, simpleFragmentShader);
-    Mp3D.gl.linkProgram(simpleShaderProgram);
+	var simpleTextureShaderProgram = Mp3D.gl.createProgram();
+    Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleVertexShader);
+    Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleFragmentShader);
+    Mp3D.gl.linkProgram(simpleTextureShaderProgram);
 
-    if(!Mp3D.gl.getProgramParameter(simpleShaderProgram, Mp3D.gl.LINK_STATUS))
+    if(!Mp3D.gl.getProgramParameter(simpleTextureShaderProgram, Mp3D.gl.LINK_STATUS))
     {
     	Mp3D.error("Could not initialise simple shader.");
     }
 
 	// set attributes
-    simpleShaderProgram.vertexPositionAttribute = Mp3D.gl.getAttribLocation(simpleShaderProgram, "vertexPosition");
-    Mp3D.gl.enableVertexAttribArray(simpleShaderProgram.vertexPositionAttribute);
-    simpleShaderProgram.vertexNormalAttribute = Mp3D.gl.getAttribLocation(simpleShaderProgram, "vertexNormal");
-    Mp3D.gl.enableVertexAttribArray(simpleShaderProgram.vertexNormalAttribute);
-    simpleShaderProgram.vertexTexCoordAttribute = Mp3D.gl.getAttribLocation(simpleShaderProgram, "vertexTexCoord");
-    Mp3D.gl.enableVertexAttribArray(simpleShaderProgram.vertexTexCoordAttribute);
+    simpleTextureShaderProgram.vertexPositionAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexPosition");
+    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexPositionAttribute);
+    simpleTextureShaderProgram.vertexNormalAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexNormal");
+    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexNormalAttribute);
+    simpleTextureShaderProgram.vertexTexCoordAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexTexCoord");
+    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexTexCoordAttribute);
     
     // set uniforms
-    simpleShaderProgram.pMatrixUniform = Mp3D.gl.getUniformLocation(simpleShaderProgram, "pMatrix");
-    simpleShaderProgram.mvMatrixUniform = Mp3D.gl.getUniformLocation(simpleShaderProgram, "mvMatrix");
-    simpleShaderProgram.nMatrixUniform = Mp3D.gl.getUniformLocation(simpleShaderProgram, "nMatrix");
-    simpleShaderProgram.textureSampler = Mp3D.gl.getUniformLocation(simpleShaderProgram, "textureSampler");
+    simpleTextureShaderProgram.pMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "pMatrix");
+    simpleTextureShaderProgram.mvMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "mvMatrix");
+    simpleTextureShaderProgram.nMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "nMatrix");
+    simpleTextureShaderProgram.textureSampler = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "textureSampler");
     
-    simpleShaderProgram.lightDirection = Mp3D.gl.getUniformLocation(simpleShaderProgram, "lightDirection");
-    simpleShaderProgram.lightAmbientColor = Mp3D.gl.getUniformLocation(simpleShaderProgram, "lightAmbientColor");
-    simpleShaderProgram.lightDiffuseColor = Mp3D.gl.getUniformLocation(simpleShaderProgram, "lightDiffuseColor");
+    simpleTextureShaderProgram.lightDirection = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightDirection");
+    simpleTextureShaderProgram.lightAmbientColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightAmbientColor");
+    simpleTextureShaderProgram.lightDiffuseColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightDiffuseColor");
     
-    Mp3D.simpleShader = simpleShaderProgram;
+    Mp3D.simpleTextureShader = simpleTextureShaderProgram;
 }
 
 Mp3D.loadVertexShader = function(name)
@@ -170,7 +170,6 @@ Mp3D.handleLoadedTexture = function(texture)
 	Mp3D.gl.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, texture.image);
 	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MAG_FILTER, WebGLRenderingContext.NEAREST);
 	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MIN_FILTER, WebGLRenderingContext.NEAREST);
-	//Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
 }
 
 Mp3D.pushMV = function()
@@ -185,24 +184,24 @@ Mp3D.popMV = function()
 	mat4.set(Mp3D.mvStack.pop(), Mp3D.mvMatrix);
 }
 
-Mp3D.setMatrixUniforms = function()
+Mp3D.setMatrixUniforms = function(shaderProgram)
 {
 	// set modelview and projection matrix
-	Mp3D.gl.uniformMatrix4fv(Mp3D.simpleShader.pMatrixUniform, false, Mp3D.pMatrix);
-	Mp3D.gl.uniformMatrix4fv(Mp3D.simpleShader.mvMatrixUniform, false, Mp3D.mvMatrix);
+	Mp3D.gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, Mp3D.pMatrix);
+	Mp3D.gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, Mp3D.mvMatrix);
 	
 	// set normal matrix
 	var normalMatrix = mat3.create();
     mat4.toInverseMat3(Mp3D.mvMatrix, normalMatrix);
     mat3.transpose(normalMatrix);
-    Mp3D.gl.uniformMatrix3fv(Mp3D.simpleShader.nMatrixUniform, false, normalMatrix);
+    Mp3D.gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
 
 	// set light information
 	if(Mp3D.activeWorld && Mp3D.activeWorld.lights[0])
 	{
-		Mp3D.gl.uniform3fv(Mp3D.simpleShader.lightDirection, Mp3D.activeWorld.lights[0].direction);
-		Mp3D.gl.uniform3fv(Mp3D.simpleShader.lightAmbientColor, Mp3D.activeWorld.lights[0].ambientColor);
-		Mp3D.gl.uniform3fv(Mp3D.simpleShader.lightDiffuseColor, Mp3D.activeWorld.lights[0].diffuseColor);
+		Mp3D.gl.uniform3fv(shaderProgram.lightDirection, Mp3D.activeWorld.lights[0].direction);
+		Mp3D.gl.uniform3fv(shaderProgram.lightAmbientColor, Mp3D.activeWorld.lights[0].ambientColor);
+		Mp3D.gl.uniform3fv(shaderProgram.lightDiffuseColor, Mp3D.activeWorld.lights[0].diffuseColor);
 	}
 }
 

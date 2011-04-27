@@ -12,7 +12,6 @@ Node.prototype.draw = function()
 	Mp3D.pushMV();
 	
 	mat4.multiply(Mp3D.mvMatrix, this.transformation, Mp3D.mvMatrix);
-	Mp3D.setMatrixUniforms();
 	
 	if(this.model)
 	{
