@@ -92,6 +92,7 @@ MojitoLoader.parseNode = function(contentNode)
 		model.setVertexIndices(indexArray);
 		
 		model.setTexture("res/cube1.png");
+			
 		model.shaderProgram = Mp3D.simpleShader;
 		
 		node.model = model;

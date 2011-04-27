@@ -170,7 +170,7 @@ Mp3D.handleLoadedTexture = function(texture)
 	Mp3D.gl.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, texture.image);
 	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MAG_FILTER, WebGLRenderingContext.NEAREST);
 	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MIN_FILTER, WebGLRenderingContext.NEAREST);
-	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
+	//Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, null);
 }
 
 Mp3D.pushMV = function()

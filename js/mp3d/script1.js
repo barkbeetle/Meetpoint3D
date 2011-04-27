@@ -18,8 +18,9 @@ function prepare()
 function loadResources()
 {
 	ResourceManager.addRequest("cube1", "res/cube1.moj");
+	ResourceManager.addRequest("sphere1", "res/sphere1.moj");
 	ResourceManager.addRequest("torus1", "res/torus1.moj");
-	ResourceManager.addDependencies(["cube1", "torus1"], setupScene);
+	ResourceManager.addDependencies(["cube1", "sphere1", "torus1"], setupScene);
 	ResourceManager.loadAll();
 }
 
@@ -30,21 +31,27 @@ function setupScene()
 	Mp3D.activeWorld = world;
 	
 	var light = new Light();
-	light.direction = [1, -1, -3];
-	light.ambientColor = [0.2, 0.2, 0.2];
+	light.direction = [0, 0, -3];
+	light.ambientColor = [0, 0, 0];
 	light.diffuseColor = [1.0, 1.0, 1.0];
 	
 	world.lights.push(light);
 	
 	// add cube
 	cubeNode = MojitoLoader.parseMojito(ResourceManager.data.cube1);
-   	mat4.translate(cubeNode.transformation, [2, 0, -10]);
+   	mat4.translate(cubeNode.transformation, [2, -1, -10]);
 	mat4.scale(cubeNode.transformation, [0.01, 0.01, 0.01]);
 	world.nodes.push(cubeNode);
+
+	// add sphere
+	sphereNode = MojitoLoader.parseMojito(ResourceManager.data.sphere1);
+	sphereNode.translate([-2, -1, -10]);
+	sphereNode.scale([0.015, 0.015, 0.015]);
+	world.nodes.push(sphereNode);
 	
 	// add torus
 	torusNode = MojitoLoader.parseMojito(ResourceManager.data.torus1);
-	torusNode.translate([-2, 0, -10]);
+	torusNode.translate([0, 2, -10]);
 	torusNode.scale([0.006, 0.006, 0.006]);
 	world.nodes.push(torusNode);
 	
@@ -68,9 +75,9 @@ function main()
 
 	timeBefore = timeNow;
 
-	mat4.rotate(cubeNode.transformation, Mp3D.degToRad(50)*elapsed, [2, 1, 1]);
-	//mat4.rotate(torusNode.transformation, Mp3D.degToRad(-30)*elapsed, [2, 1, 1]);
-	torusNode.rotate(Mp3D.degToRad(-40)*elapsed, [2, 1, 1]);
+	cubeNode.rotate(Mp3D.degToRad(10)*elapsed, [2, 1, 1]);
+	sphereNode.rotate(Mp3D.degToRad(20)*elapsed, [2, 1, 1]);
+	torusNode.rotate(Mp3D.degToRad(30)*elapsed, [2, 1, 1]);
 
 	Mp3D.drawScene();
 	requestAnimFrame(main);
