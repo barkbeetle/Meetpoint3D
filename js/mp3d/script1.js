@@ -32,10 +32,11 @@ function setupScene()
 	
 	var light = new Light();
 	light.direction = [0, 0, -3];
-	light.ambientColor = [0, 0, 0];
+	light.ambientColor = [0.1, 0.1, 0.1];
 	light.diffuseColor = [1.0, 1.0, 1.0];
+	light.specularColor = [1.0, 1.0, 1.0];
 	
-	world.lights.push(light);
+	world.lights.push(light);	
 	
 	// add cube
 	cubeNode = MojitoLoader.parseMojito(ResourceManager.data.cube1);

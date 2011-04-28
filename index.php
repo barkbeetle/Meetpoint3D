@@ -15,6 +15,7 @@
 		<script type="text/javascript" src="js/mp3d/World.js"></script>
 		<script type="text/javascript" src="js/mp3d/Light.js"></script>
 		<script type="text/javascript" src="js/mp3d/MojitoLoader.js"></script>
+		<script type="text/javascript" src="js/mp3d/SimpleTextureMaterial.js"></script>
 		<script type="text/javascript" src="js/mp3d/script1.js"></script>
 	</head>
 	<body>

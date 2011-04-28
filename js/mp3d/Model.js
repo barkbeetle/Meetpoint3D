@@ -5,8 +5,7 @@ function Model()
 	this.vertexTexCoordBuffer = Mp3D.gl.createBuffer();
 	this.vertexColorBuffer = Mp3D.gl.createBuffer();
 	this.vertexIndexBuffer = Mp3D.gl.createBuffer();
-	this.texture = null;
-	this.shaderProgram = null;
+	this.material = null;
 }
 
 Model.prototype.setVertexPositions = function(vertexPositions)
@@ -50,18 +49,25 @@ Model.prototype.setVertexIndices = function(vertexIndices)
 	this.vertexIndexBuffer.numItems = vertexIndices.length;
 }
 
-Model.prototype.setTexture = function(filename)
+Model.prototype.setMaterial = function(material)
+{
+	this.material = material;
+}
+
+/*Model.prototype.setTexture = function(filename)
 {
 	this.texture = Mp3D.gl.createTexture();
 	this.texture.image = new Image();
 	var loadedTexture = this.texture;
 	this.texture.image.onload = function(){ Mp3D.handleLoadedTexture(loadedTexture); };
 	this.texture.image.src = filename;
-}
+}*/
 
 Model.prototype.draw = function()
 {
-	Mp3D.gl.useProgram(this.shaderProgram);
+	this.material.drawModel(this);
+
+	/*Mp3D.gl.useProgram(this.shaderProgram);
 	Mp3D.setMatrixUniforms(this.shaderProgram);
 
 	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexPositionBuffer);
@@ -80,6 +86,6 @@ Model.prototype.draw = function()
     	Mp3D.gl.uniform1i(this.shaderProgram.samplerUniform, 0);
     }
 
- 	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, this.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);
+ 	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, this.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);*/
 }
 

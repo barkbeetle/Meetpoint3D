@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<materials>
+	<material name="CompanionCube">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/cube1.png"/>
+		</attributes>
+	</material>
+	<material name="Donut">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/starbucks.png"/>
+		</attributes>
+	</material>
+</materials>

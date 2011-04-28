@@ -1,5 +1,6 @@
 Mp3D = new Object();
 
+Mp3D.materials = new Array();
 Mp3D.readyFunctions = new Array();
 Mp3D.mvStack = new Array();
 
@@ -10,10 +11,25 @@ Mp3D.ready = function(func)
 
 Mp3D.init = function()
 {
-	// register all resources needed for setup
-	ResourceManager.addRequest("simpleTextureVertexShader", "res/shaders/simpleTextureShader.vert");
-	ResourceManager.addRequest("simpleTextureFragmentShader", "res/shaders/simpleTextureShader.frag");
-	ResourceManager.addDependencies(["simpleTextureVertexShader", "simpleTextureFragmentShader"], Mp3D.setup);
+	// register all resources needed for the game to startup
+
+	// material definition
+	ResourceManager.addRequest("materialDefinition", "res/materials.xml");
+	ResourceManager.addDependency("materialDefinition", Mp3D.setup);
+
+	// material resources (only the ones which cannot be loaded at runtime)
+	for(var i = 0; i < Mp3D.materials.length; i++)
+	{
+		var material = Mp3D.materials[i];
+		var materialDependencies = material.getResourceDependencies();
+		
+		$.each(materialDependencies, function()
+		{
+			ResourceManager.addRequest(this[0], this[1]);
+			ResourceManager.addDependency(this[0], Mp3D.setup);
+		});
+	}
+	
 	ResourceManager.loadAll();
 }
 
@@ -22,6 +38,7 @@ Mp3D.setup = function()
 	Mp3D.gl = Mp3D.createWebGLContext();
 	Mp3D.loadShaders();
 	Mp3D.setupViewport();
+	Mp3D.createMaterials();
 	Mp3D.activeWorld = null;
 	
 	while(Mp3D.readyFunctions.length > 0)
@@ -85,12 +102,74 @@ Mp3D.setupViewport = function()
 	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 10000.0, Mp3D.pMatrix);
 }
 
+Mp3D.registerMaterial = function(material)
+{
+	Mp3D.materials.push(material);
+}
+
+Mp3D.createMaterials = function()
+{
+	// initialize all materials
+	for(var i = 0; i < Mp3D.materials.length; i++)
+	{
+		var material = Mp3D.materials[i];
+		material.init();
+	}
+	
+	// read materials from config file
+	materialDefinition = ResourceManager.data.materialDefinition;
+	if(materialDefinition)
+	{
+		$(materialDefinition).children("materials").children("material").each(function()
+		{
+			Mp3D.parseMaterialNode(this);
+		});
+	}
+	
+}
+
+Mp3D.parseMaterialNode = function(materialNode)
+{
+	var materialName = $(materialNode)[0].attributes["name"].value;
+	var materialClass = $(materialNode).children("class")[0].attributes["name"].value;
+
+	var material = eval("new "+materialClass+"()");
+	
+	var attributesNode = $(materialNode).children("attributes");	
+	$.each(attributesNode.children(), function()
+	{
+		var attributeType = this.nodeName;
+		var attributeName = this.attributes["name"].value;
+		var attributeValue = this.attributes["value"].value;
+		
+		if(attributeType.toLowerCase() == "string")
+		{
+			var command  = "material.set"+attributeName.charAt(0).toUpperCase() + attributeName.slice(1)+"('"+attributeValue+"')";
+			eval(command);
+		}
+		else
+		{
+			var command  = "material.set"+attributeName.charAt(0).toUpperCase() + attributeName.slice(1)+"("+attributeValue+")";
+			eval(command);
+		}
+	});
+	
+	if(Mp3D.materials[materialName])
+	{
+		throw "duplicate entry for material '"+materialName+"'";
+	}
+	else
+	{
+		Mp3D.materials[materialName] = material;
+	}
+}
+
 Mp3D.loadShaders = function()
 {
 	// simple texture shader
 	var simpleVertexShader = Mp3D.loadVertexShader("simpleTextureVertexShader");
 	var simpleFragmentShader = Mp3D.loadFragmentShader("simpleTextureFragmentShader");
-		
+	
 	var simpleTextureShaderProgram = Mp3D.gl.createProgram();
     Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleVertexShader);
     Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleFragmentShader);
@@ -182,27 +261,6 @@ Mp3D.pushMV = function()
 Mp3D.popMV = function()
 {
 	mat4.set(Mp3D.mvStack.pop(), Mp3D.mvMatrix);
-}
-
-Mp3D.setMatrixUniforms = function(shaderProgram)
-{
-	// set modelview and projection matrix
-	Mp3D.gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, Mp3D.pMatrix);
-	Mp3D.gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, Mp3D.mvMatrix);
-	
-	// set normal matrix
-	var normalMatrix = mat3.create();
-    mat4.toInverseMat3(Mp3D.mvMatrix, normalMatrix);
-    mat3.transpose(normalMatrix);
-    Mp3D.gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-
-	// set light information
-	if(Mp3D.activeWorld && Mp3D.activeWorld.lights[0])
-	{
-		Mp3D.gl.uniform3fv(shaderProgram.lightDirection, Mp3D.activeWorld.lights[0].direction);
-		Mp3D.gl.uniform3fv(shaderProgram.lightAmbientColor, Mp3D.activeWorld.lights[0].ambientColor);
-		Mp3D.gl.uniform3fv(shaderProgram.lightDiffuseColor, Mp3D.activeWorld.lights[0].diffuseColor);
-	}
 }
 
 Mp3D.drawScene = function()

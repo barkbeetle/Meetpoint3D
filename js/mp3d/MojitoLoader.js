@@ -22,7 +22,7 @@ MojitoLoader.parseNode = function(contentNode)
 		var uvCoords = $(contentNode).children("uvset")[0].textContent;
 		var normals = $(contentNode).children("normals")[0].textContent;
 		var faces = $(contentNode).children("faces")[0].textContent;
-		//var material = $(node).children("material")[0].innerText;
+		var materialName = $(contentNode).children("material")[0].textContent;
 		
 		// parse vertices
 		var allVertices = new Array();
@@ -91,7 +91,8 @@ MojitoLoader.parseNode = function(contentNode)
 		model.setVertexNormals(normalsArray);
 		model.setVertexIndices(indexArray);
 		
-		model.setTexture("res/cube1.png");
+		var material = Mp3D.materials[materialName];		
+		model.setMaterial(material);
 			
 		model.shaderProgram = Mp3D.simpleTextureShader;
 		
