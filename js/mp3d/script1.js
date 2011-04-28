@@ -43,18 +43,20 @@ function setupScene()
    	mat4.translate(cubeNode.transformation, [2, -1, -10]);
 	mat4.scale(cubeNode.transformation, [0.01, 0.01, 0.01]);
 	world.nodes.push(cubeNode);
-
+	
 	// add sphere
 	sphereNode = MojitoLoader.parseMojito(ResourceManager.data.sphere1);
 	sphereNode.translate([-2, -1, -10]);
 	sphereNode.scale([0.015, 0.015, 0.015]);
 	world.nodes.push(sphereNode);
+
 	
 	// add torus
 	torusNode = MojitoLoader.parseMojito(ResourceManager.data.torus1);
 	torusNode.translate([0, 2, -10]);
 	torusNode.scale([0.006, 0.006, 0.006]);
 	world.nodes.push(torusNode);
+
 	
 	startGame();
 }

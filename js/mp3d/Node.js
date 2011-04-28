@@ -28,7 +28,6 @@ Node.prototype.draw = function()
 
 Node.prototype.append = function(node)
 {
-	console.log("append");
 	this.children.push(node);
 }
 

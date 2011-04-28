@@ -17,9 +17,7 @@ MojitoLoader.parseNode = function(contentNode)
 	var node = new Node();
 
 	if(contentNode.nodeName.toLowerCase() == "polygon")
-	{
-		console.log("poly");
-	
+	{	
 		var vertices = $(contentNode).children("vertices")[0].textContent;
 		var uvCoords = $(contentNode).children("uvset")[0].textContent;
 		var normals = $(contentNode).children("normals")[0].textContent;
@@ -93,7 +91,6 @@ MojitoLoader.parseNode = function(contentNode)
 		model.setVertexNormals(normalsArray);
 		model.setVertexIndices(indexArray);
 		
-		
 		// parse materials
 		if($(contentNode).children("material")[0])
 		{
@@ -124,7 +121,6 @@ MojitoLoader.parseNode = function(contentNode)
 		var childrenNode = $(contentNode).children("children")[0];
 		if(childrenNode)
 		{
-			console.log(childrenNode);
 			$.each($(childrenNode).children(), function()
 			{
 				node.append(MojitoLoader.parseNode(this));
@@ -153,7 +149,6 @@ MojitoLoader.parseNode = function(contentNode)
 		var childrenNode = $(contentNode).children("children")[0];
 		if(childrenNode)
 		{
-			console.log(childrenNode);
 			$.each($(childrenNode).children(), function()
 			{
 				node.append(MojitoLoader.parseNode(this));

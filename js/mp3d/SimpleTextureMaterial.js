@@ -85,14 +85,16 @@ SimpleTextureMaterial.prototype.drawModel = function(model)
 
 	Mp3D.gl.useProgram(SimpleTextureMaterial.shaderProgram);
 
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, model.vertexPositionBuffer);
-    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute, model.vertexPositionBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
+	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexPositionBuffer);
+    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute, model.vertexPositionBuffer.itemSize, WebGLRenderingContext.FLOAT, false, 0, 0);
     
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, model.vertexNormalBuffer);
-    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexNormalAttribute, model.vertexNormalBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
+	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexNormalBuffer);
+    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexNormalAttribute, model.vertexNormalBuffer.itemSize, WebGLRenderingContext.FLOAT, false, 0, 0);
     
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, model.vertexTexCoordBuffer);
-    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexTexCoordAttribute, model.vertexTexCoordBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
+	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexTexCoordBuffer);
+    Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexTexCoordAttribute, model.vertexTexCoordBuffer.itemSize, WebGLRenderingContext.FLOAT, false, 0, 0);
+    
+    Mp3D.gl.bindBuffer(WebGLRenderingContext.ELEMENT_ARRAY_BUFFER, model.vertexIndexBuffer);
     
     if(this.texture)
     {
