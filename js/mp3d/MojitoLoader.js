@@ -18,11 +18,13 @@ MojitoLoader.parseNode = function(contentNode)
 
 	if(contentNode.nodeName.toLowerCase() == "polygon")
 	{
+		console.log("poly");
+	
 		var vertices = $(contentNode).children("vertices")[0].textContent;
 		var uvCoords = $(contentNode).children("uvset")[0].textContent;
 		var normals = $(contentNode).children("normals")[0].textContent;
 		var faces = $(contentNode).children("faces")[0].textContent;
-		var materialName = $(contentNode).children("material")[0].textContent;
+		var transformation = $(contentNode).children("transformation")[0].textContent;
 		
 		// parse vertices
 		var allVertices = new Array();
@@ -35,7 +37,7 @@ MojitoLoader.parseNode = function(contentNode)
 		var allUVCoords = new Array();
 		$.each(uvCoords.split(" "), function()
 		{
-			allUVCoords.push(parseFloat(this));
+			allUVCoords.push(parseFloat(this)*-1);
 		});
 		
 		// parse normals
@@ -44,7 +46,7 @@ MojitoLoader.parseNode = function(contentNode)
 		{
 			allNormals.push(parseFloat(this));
 		});
-		
+				
 		// parse faces
 		var verticesArray = new Array();
 		var uvCoordsArray = new Array();
@@ -91,17 +93,39 @@ MojitoLoader.parseNode = function(contentNode)
 		model.setVertexNormals(normalsArray);
 		model.setVertexIndices(indexArray);
 		
-		var material = Mp3D.materials[materialName];		
-		model.setMaterial(material);
+		
+		// parse materials
+		if($(contentNode).children("material")[0])
+		{
+			var materialName = $(contentNode).children("material")[0].textContent;		
+			var material = Mp3D.materials[materialName];		
+			model.setMaterial(material);
+		}
 			
 		model.shaderProgram = Mp3D.simpleTextureShader;
 		
 		node.model = model;
 
-		var childrenNode = $(contentNode).children("children");
+		// parse transformation
+		var transformationStringArray = transformation.split(" ");
+		var transformationArray = new Array();
+		for(var i = 0; i < 16; i++)
+		{
+			transformationArray.push(parseFloat(transformationStringArray[i]));
+		}
+		if(transformationArray)
+		{
+			var transformationMatrix = mat4.create(transformationArray);
+			mat4.transpose(transformationMatrix);
+			mat4.set(transformationMatrix, node.transformation);
+		}
+
+		// parse children
+		var childrenNode = $(contentNode).children("children")[0];
 		if(childrenNode)
 		{
-			$.each(childrenNode.children(), function()
+			console.log(childrenNode);
+			$.each($(childrenNode).children(), function()
 			{
 				node.append(MojitoLoader.parseNode(this));
 			});
@@ -109,10 +133,28 @@ MojitoLoader.parseNode = function(contentNode)
 	}
 	else if(contentNode.nodeName.toLowerCase() == "null")
 	{
-		var childrenNode = $(contentNode).children("children");
+		var transformation = $(contentNode).children("transformation")[0].textContent;
+	
+		// parse transformation
+		var transformationStringArray = transformation.split(" ");
+		var transformationArray = new Array();
+		for(var i = 0; i < 16; i++)
+		{
+			transformationArray.push(parseFloat(transformationStringArray[i]));
+		}
+		if(transformationArray)
+		{
+			var transformationMatrix = mat4.create(transformationArray);
+			mat4.transpose(transformationMatrix);
+			mat4.set(transformationMatrix, node.transformation);
+		}
+	
+		// parse children
+		var childrenNode = $(contentNode).children("children")[0];
 		if(childrenNode)
 		{
-			$.each(childrenNode.children(), function()
+			console.log(childrenNode);
+			$.each($(childrenNode).children(), function()
 			{
 				node.append(MojitoLoader.parseNode(this));
 			});
