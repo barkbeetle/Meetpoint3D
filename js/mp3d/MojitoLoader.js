@@ -94,12 +94,14 @@ MojitoLoader.parseNode = function(contentNode)
 		// parse materials
 		if($(contentNode).children("material")[0])
 		{
-			var materialName = $(contentNode).children("material")[0].textContent;		
-			var material = Mp3D.materials[materialName];		
+			var materialName = $(contentNode).children("material")[0].textContent;
+			var material = Mp3D.materials[materialName];
+			if(!material)
+			{
+				throw "material '"+materialName+"' is not defined in materials.xml";
+			}
 			model.setMaterial(material);
 		}
-			
-		model.shaderProgram = Mp3D.simpleTextureShader;
 		
 		node.model = model;
 

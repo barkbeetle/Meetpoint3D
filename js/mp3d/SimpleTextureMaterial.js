@@ -1,10 +1,9 @@
 function SimpleTextureMaterial()
 {
-	this.shaderProgram = Mp3D.simpleTextureShader;
 	this.texture = null;
 }
 
-Mp3D.registerMaterial(SimpleTextureMaterial);
+Mp3D.registerMaterialClass(SimpleTextureMaterial);
 
 SimpleTextureMaterial.getResourceDependencies = function()
 {
@@ -17,7 +16,7 @@ SimpleTextureMaterial.init = function()
 	// load simple texture shader
 	var simpleTextureVertexShader = Mp3D.loadVertexShader("simpleTextureVertexShader");
 	var simpleTextureFragmentShader = Mp3D.loadFragmentShader("simpleTextureFragmentShader");
-		
+	
 	var simpleTextureShaderProgram = Mp3D.gl.createProgram();
     Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleTextureVertexShader);
     Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleTextureFragmentShader);
@@ -81,9 +80,9 @@ SimpleTextureMaterial.setMatrixUniforms = function()
 
 SimpleTextureMaterial.prototype.drawModel = function(model)
 {
-	SimpleTextureMaterial.setMatrixUniforms();
-
 	Mp3D.gl.useProgram(SimpleTextureMaterial.shaderProgram);
+	
+	SimpleTextureMaterial.setMatrixUniforms();
 
 	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexPositionBuffer);
     Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute, model.vertexPositionBuffer.itemSize, WebGLRenderingContext.FLOAT, false, 0, 0);

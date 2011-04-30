@@ -54,38 +54,8 @@ Model.prototype.setMaterial = function(material)
 	this.material = material;
 }
 
-/*Model.prototype.setTexture = function(filename)
-{
-	this.texture = Mp3D.gl.createTexture();
-	this.texture.image = new Image();
-	var loadedTexture = this.texture;
-	this.texture.image.onload = function(){ Mp3D.handleLoadedTexture(loadedTexture); };
-	this.texture.image.src = filename;
-}*/
-
 Model.prototype.draw = function()
 {
 	this.material.drawModel(this);
-
-	/*Mp3D.gl.useProgram(this.shaderProgram);
-	Mp3D.setMatrixUniforms(this.shaderProgram);
-
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexPositionBuffer);
-    Mp3D.gl.vertexAttribPointer(this.shaderProgram.vertexPositionAttribute, this.vertexPositionBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
-    
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexNormalBuffer);
-    Mp3D.gl.vertexAttribPointer(this.shaderProgram.vertexNormalAttribute, this.vertexNormalBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
-    
-	Mp3D.gl.bindBuffer(Mp3D.gl.ARRAY_BUFFER, this.vertexTexCoordBuffer);
-    Mp3D.gl.vertexAttribPointer(this.shaderProgram.vertexTexCoordAttribute, this.vertexTexCoordBuffer.itemSize, Mp3D.gl.FLOAT, false, 0, 0);
-    
-    if(this.texture)
-    {
-		Mp3D.gl.activeTexture(WebGLRenderingContext.TEXTURE0);
-    	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.texture);
-    	Mp3D.gl.uniform1i(this.shaderProgram.samplerUniform, 0);
-    }
-
- 	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, this.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);*/
 }
 

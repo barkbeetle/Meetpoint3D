@@ -1,15 +1,27 @@
 <?xml version="1.0"?>
 <materials>
+	<material name="Red">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="FF0000"/>
+		</attributes>
+	</material>
+	<material name="Green">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="00FF00"/>
+		</attributes>
+	</material>
+	<material name="Blue">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="0000FF"/>
+		</attributes>
+	</material>
 	<material name="CompanionCube">
 		<class name="SimpleTextureMaterial"/>
 		<attributes>
 			<string name="texture" value="res/cube1.png"/>
-		</attributes>
-	</material>
-	<material name="Donut">
-		<class name="SimpleTextureMaterial"/>
-		<attributes>
-			<string name="texture" value="res/starbucks.png"/>
 		</attributes>
 	</material>
 </materials>

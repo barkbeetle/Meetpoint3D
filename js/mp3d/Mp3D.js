@@ -1,6 +1,7 @@
 Mp3D = new Object();
 
 Mp3D.materials = new Array();
+Mp3D.materialClasses = new Array();
 Mp3D.readyFunctions = new Array();
 Mp3D.mvStack = new Array();
 
@@ -18,9 +19,9 @@ Mp3D.init = function()
 	ResourceManager.addDependency("materialDefinition", Mp3D.setup);
 
 	// material resources (only the ones which cannot be loaded at runtime)
-	for(var i = 0; i < Mp3D.materials.length; i++)
+	for(var i = 0; i < Mp3D.materialClasses.length; i++)
 	{
-		var material = Mp3D.materials[i];
+		var material = Mp3D.materialClasses[i];
 		var materialDependencies = material.getResourceDependencies();
 		
 		$.each(materialDependencies, function()
@@ -36,7 +37,6 @@ Mp3D.init = function()
 Mp3D.setup = function()
 {
 	Mp3D.gl = Mp3D.createWebGLContext();
-	Mp3D.loadShaders();
 	Mp3D.setupViewport();
 	Mp3D.createMaterials();
 	Mp3D.activeWorld = null;
@@ -102,17 +102,17 @@ Mp3D.setupViewport = function()
 	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 10000.0, Mp3D.pMatrix);
 }
 
-Mp3D.registerMaterial = function(material)
+Mp3D.registerMaterialClass = function(materialClass)
 {
-	Mp3D.materials.push(material);
+	Mp3D.materialClasses.push(materialClass);
 }
 
 Mp3D.createMaterials = function()
 {
-	// initialize all materials
-	for(var i = 0; i < Mp3D.materials.length; i++)
+	// initialize all material classes
+	for(var i = 0; i < Mp3D.materialClasses.length; i++)
 	{
-		var material = Mp3D.materials[i];
+		var material = Mp3D.materialClasses[i];
 		material.init();
 	}
 	
@@ -132,7 +132,7 @@ Mp3D.parseMaterialNode = function(materialNode)
 {
 	var materialName = $(materialNode)[0].attributes["name"].value;
 	var materialClass = $(materialNode).children("class")[0].attributes["name"].value;
-
+	
 	var material = eval("new "+materialClass+"()");
 	
 	var attributesNode = $(materialNode).children("attributes");	
@@ -162,43 +162,6 @@ Mp3D.parseMaterialNode = function(materialNode)
 	{
 		Mp3D.materials[materialName] = material;
 	}
-}
-
-Mp3D.loadShaders = function()
-{
-	// simple texture shader
-	var simpleVertexShader = Mp3D.loadVertexShader("simpleTextureVertexShader");
-	var simpleFragmentShader = Mp3D.loadFragmentShader("simpleTextureFragmentShader");
-	
-	var simpleTextureShaderProgram = Mp3D.gl.createProgram();
-    Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleVertexShader);
-    Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleFragmentShader);
-    Mp3D.gl.linkProgram(simpleTextureShaderProgram);
-
-    if(!Mp3D.gl.getProgramParameter(simpleTextureShaderProgram, Mp3D.gl.LINK_STATUS))
-    {
-    	Mp3D.error("Could not initialise simple shader.");
-    }
-
-	// set attributes
-    simpleTextureShaderProgram.vertexPositionAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexPosition");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexPositionAttribute);
-    simpleTextureShaderProgram.vertexNormalAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexNormal");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexNormalAttribute);
-    simpleTextureShaderProgram.vertexTexCoordAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexTexCoord");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexTexCoordAttribute);
-    
-    // set uniforms
-    simpleTextureShaderProgram.pMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "pMatrix");
-    simpleTextureShaderProgram.mvMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "mvMatrix");
-    simpleTextureShaderProgram.nMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "nMatrix");
-    simpleTextureShaderProgram.textureSampler = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "textureSampler");
-    
-    simpleTextureShaderProgram.lightDirection = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightDirection");
-    simpleTextureShaderProgram.lightAmbientColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightAmbientColor");
-    simpleTextureShaderProgram.lightDiffuseColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightDiffuseColor");
-    
-    Mp3D.simpleTextureShader = simpleTextureShaderProgram;
 }
 
 Mp3D.loadVertexShader = function(name)
