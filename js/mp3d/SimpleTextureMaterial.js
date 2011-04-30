@@ -13,6 +13,9 @@ SimpleTextureMaterial.getResourceDependencies = function()
 
 SimpleTextureMaterial.init = function()
 {
+	console.log("texture initialized.");
+	SimpleTextureMaterial.isInitialized = true;
+
 	// load simple texture shader
 	var simpleTextureVertexShader = Mp3D.loadVertexShader("simpleTextureVertexShader");
 	var simpleTextureFragmentShader = Mp3D.loadFragmentShader("simpleTextureFragmentShader");
@@ -22,18 +25,15 @@ SimpleTextureMaterial.init = function()
     Mp3D.gl.attachShader(simpleTextureShaderProgram, simpleTextureFragmentShader);
     Mp3D.gl.linkProgram(simpleTextureShaderProgram);
 
-    if(!Mp3D.gl.getProgramParameter(simpleTextureShaderProgram, Mp3D.gl.LINK_STATUS))
+    if(!Mp3D.gl.getProgramParameter(simpleTextureShaderProgram, WebGLRenderingContext.LINK_STATUS))
     {
-    	Mp3D.error("Could not initialise simple shader.");
+    	Mp3D.error("Could not initialise simple texture shader.");
     }
 
 	// set attributes
     simpleTextureShaderProgram.vertexPositionAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexPosition");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexPositionAttribute);
     simpleTextureShaderProgram.vertexNormalAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexNormal");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexNormalAttribute);
     simpleTextureShaderProgram.vertexTexCoordAttribute = Mp3D.gl.getAttribLocation(simpleTextureShaderProgram, "vertexTexCoord");
-    Mp3D.gl.enableVertexAttribArray(simpleTextureShaderProgram.vertexTexCoordAttribute);
     
     // set uniforms
     simpleTextureShaderProgram.pMatrixUniform = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "pMatrix");
@@ -55,6 +55,20 @@ SimpleTextureMaterial.prototype.setTexture = function(filename)
 	var loadedTexture = this.texture;
 	this.texture.image.onload = function(){ Mp3D.handleLoadedTexture(loadedTexture); };
 	this.texture.image.src = filename;
+}
+
+SimpleTextureMaterial.enable = function()
+{
+    Mp3D.gl.enableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute);
+    Mp3D.gl.enableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexNormalAttribute);
+    Mp3D.gl.enableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexTexCoordAttribute);
+}
+
+SimpleTextureMaterial.disable = function()
+{
+	Mp3D.gl.disableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute);
+    Mp3D.gl.disableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexNormalAttribute);
+    Mp3D.gl.disableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexTexCoordAttribute);
 }
 
 SimpleTextureMaterial.setMatrixUniforms = function()
@@ -81,7 +95,7 @@ SimpleTextureMaterial.setMatrixUniforms = function()
 SimpleTextureMaterial.prototype.drawModel = function(model)
 {
 	Mp3D.gl.useProgram(SimpleTextureMaterial.shaderProgram);
-	
+	SimpleTextureMaterial.enable();
 	SimpleTextureMaterial.setMatrixUniforms();
 
 	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexPositionBuffer);
@@ -99,9 +113,11 @@ SimpleTextureMaterial.prototype.drawModel = function(model)
     {
 		Mp3D.gl.activeTexture(WebGLRenderingContext.TEXTURE0);
     	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.texture);
-    	Mp3D.gl.uniform1i(SimpleTextureMaterial.shaderProgram.samplerUniform, 0);
+    	Mp3D.gl.uniform1i(SimpleTextureMaterial.shaderProgram.textureSampler, 0);
     }
 
  	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, model.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);
+ 	
+	SimpleTextureMaterial.disable();
 }
 

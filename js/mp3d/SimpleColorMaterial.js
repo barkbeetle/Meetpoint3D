@@ -13,6 +13,8 @@ SimpleColorMaterial.getResourceDependencies = function()
 
 SimpleColorMaterial.init = function()
 {
+	SimpleColorMaterial.isInitialized = true;
+
 	// load simple color shader
 	var simpleColorVertexShader = Mp3D.loadVertexShader("simpleColorVertexShader");
 	var simpleColorFragmentShader = Mp3D.loadFragmentShader("simpleColorFragmentShader");
@@ -29,9 +31,7 @@ SimpleColorMaterial.init = function()
 
 	// set attributes
     simpleColorShaderProgram.vertexPositionAttribute = Mp3D.gl.getAttribLocation(simpleColorShaderProgram, "vertexPosition");
-    Mp3D.gl.enableVertexAttribArray(simpleColorShaderProgram.vertexPositionAttribute);
     simpleColorShaderProgram.vertexNormalAttribute = Mp3D.gl.getAttribLocation(simpleColorShaderProgram, "vertexNormal");
-    Mp3D.gl.enableVertexAttribArray(simpleColorShaderProgram.vertexNormalAttribute);
 
     // set uniforms
     simpleColorShaderProgram.pMatrixUniform = Mp3D.gl.getUniformLocation(simpleColorShaderProgram, "pMatrix");
@@ -53,6 +53,18 @@ SimpleColorMaterial.prototype.setColor = function(colorString)
 	var blue = parseInt(colorString.slice(4, 6), 16)/255;
 	
 	this.color = [red, green, blue];
+}
+
+SimpleColorMaterial.enable = function()
+{
+    Mp3D.gl.enableVertexAttribArray(SimpleColorMaterial.shaderProgram.vertexPositionAttribute);
+    Mp3D.gl.enableVertexAttribArray(SimpleColorMaterial.shaderProgram.vertexNormalAttribute);
+}
+
+SimpleColorMaterial.disable = function()
+{
+    Mp3D.gl.disableVertexAttribArray(SimpleColorMaterial.shaderProgram.vertexPositionAttribute);
+    Mp3D.gl.disableVertexAttribArray(SimpleColorMaterial.shaderProgram.vertexNormalAttribute);
 }
 
 SimpleColorMaterial.setMatrixUniforms = function()
@@ -79,7 +91,7 @@ SimpleColorMaterial.setMatrixUniforms = function()
 SimpleColorMaterial.prototype.drawModel = function(model)
 {
 	Mp3D.gl.useProgram(SimpleColorMaterial.shaderProgram);
-
+	SimpleColorMaterial.enable();
 	SimpleColorMaterial.setMatrixUniforms();
 
 	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexPositionBuffer);
@@ -92,9 +104,12 @@ SimpleColorMaterial.prototype.drawModel = function(model)
     
     if(this.color)
     {
+    	Mp3D.gl.activeTexture(WebGLRenderingContext.TEXdTURE0);
     	Mp3D.gl.uniform3fv(SimpleColorMaterial.shaderProgram.color, this.color);
     }
 
  	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, model.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);
+ 	
+ 	SimpleColorMaterial.disable();
 }
 

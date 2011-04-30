@@ -56,6 +56,7 @@ Model.prototype.setMaterial = function(material)
 
 Model.prototype.draw = function()
 {
+	console.log("draw");
 	this.material.drawModel(this);
 }
 

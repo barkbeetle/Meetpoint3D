@@ -73,16 +73,3 @@ ResourceManager.loadResource = function(name)
 		}	
 	});
 };
-
-
-
-ResourceManager.test = function()
-{
-	ResourceManager.addRequest("a", "res/cube1.moj");
-	ResourceManager.addRequest("b", "res/cube1.moj");
-	ResourceManager.addDependencies(["a", "b"], function()
-	{
-		alert(ResourceManager.data.a+"\n\n\n"+ResourceManager.data.b);
-	});
-	ResourceManager.load();
-}
