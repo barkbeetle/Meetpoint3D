@@ -4,10 +4,10 @@
 		<title>Meetpoint 3D</title>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 		<link type="text/css" rel="stylesheet" href="css/style1.css"/>
-		<script type="text/javascript" src="js/jquery-1.5.js"></script>
-		<script type="text/javascript" src="js/jquery-url.js"></script>
-		<script type="text/javascript" src="js/webgl-utils.js"></script>
-		<script type="text/javascript" src="js/glMatrix-0.9.5.min.js"></script>
+		<script type="text/javascript" src="js/helpers/jquery-1.5.js"></script>
+		<script type="text/javascript" src="js/helpers/jquery-url.js"></script>
+		<script type="text/javascript" src="js/helpers/webgl-utils.js"></script>
+		<script type="text/javascript" src="js/helpers/glMatrix-0.9.5.min.js"></script>
 		<script type="text/javascript" src="js/mp3d/ResourceManager.js"></script>
 		<script type="text/javascript" src="js/mp3d/Mp3D.js"></script>
 		<script type="text/javascript" src="js/mp3d/Node.js"></script>
@@ -17,7 +17,7 @@
 		<script type="text/javascript" src="js/mp3d/MojitoLoader.js"></script>
 		<script type="text/javascript" src="js/mp3d/SimpleColorMaterial.js"></script>
 		<script type="text/javascript" src="js/mp3d/SimpleTextureMaterial.js"></script>
-		<script type="text/javascript" src="js/mp3d/script1.js"></script>
+		<script type="text/javascript" src="js/rotating_shapes.js"></script>
 	</head>
 	<body>
 		<div id="header"></div>

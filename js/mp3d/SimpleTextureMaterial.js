@@ -13,7 +13,6 @@ SimpleTextureMaterial.getResourceDependencies = function()
 
 SimpleTextureMaterial.init = function()
 {
-	console.log("texture initialized.");
 	SimpleTextureMaterial.isInitialized = true;
 
 	// load simple texture shader
