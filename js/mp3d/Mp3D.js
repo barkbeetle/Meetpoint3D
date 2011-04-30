@@ -1,6 +1,7 @@
 Mp3D = new Object();
 
 Mp3D.materials = new Array();
+Mp3D.defaultMaterial = null;
 Mp3D.materialClasses = new Array();
 Mp3D.readyFunctions = new Array();
 Mp3D.mvStack = new Array();
@@ -132,6 +133,7 @@ Mp3D.parseMaterialNode = function(materialNode)
 {
 	var materialName = $(materialNode)[0].attributes["name"].value;
 	var materialClass = $(materialNode).children("class")[0].attributes["name"].value;
+	var materialDefault = $(materialNode)[0].attributes["default"];
 	
 	var material = eval("new "+materialClass+"()");
 	
@@ -161,6 +163,18 @@ Mp3D.parseMaterialNode = function(materialNode)
 	else
 	{
 		Mp3D.materials[materialName] = material;
+		
+		if(materialDefault && materialDefault.value.toLowerCase()== "true")
+		{
+			if(!Mp3D.defaultMaterial)
+			{
+				Mp3D.defaultMaterial = material;
+			}
+			else
+			{
+				throw "only one material can be configured to be default."
+			}
+		}
 	}
 }
 

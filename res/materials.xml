@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <materials>
+	<material name="LightGray" default="true">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="CCCCCC"/>
+		</attributes>
+	</material>
 	<material name="Red">
 		<class name="SimpleColorMaterial"/>
 		<attributes>

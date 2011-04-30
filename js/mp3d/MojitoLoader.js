@@ -6,13 +6,13 @@ MojitoLoader.parseMojito = function(mojito)
 	
 	$(mojito).children("nodes").children().each(function()
 	{
-		rootNode.append(MojitoLoader.parseNode(this));
+		rootNode.append(MojitoLoader.parseNode(this, null));
 	});
 	
 	return rootNode;
 }
 
-MojitoLoader.parseNode = function(contentNode)
+MojitoLoader.parseNode = function(contentNode, parentMaterial)
 {
 	var node = new Node();
 
@@ -91,18 +91,36 @@ MojitoLoader.parseNode = function(contentNode)
 		model.setVertexNormals(normalsArray);
 		model.setVertexIndices(indexArray);
 		
+		var material = null;
+		
 		// parse materials
 		if($(contentNode).children("material")[0])
 		{
 			var materialName = $(contentNode).children("material")[0].textContent;
-			var material = Mp3D.materials[materialName];
-			if(!material)
+			var materialObject = Mp3D.materials[materialName];
+			if(!materialObject)
 			{
 				throw "material '"+materialName+"' is not defined in materials.xml";
 			}
-			model.setMaterial(material);
+			material = materialObject;
+		}
+		else if(parentMaterial)
+		{
+			material = parentMaterial;
+		}
+		else
+		{
+			if(Mp3D.defaultMaterial)
+			{
+				material = Mp3D.defaultMaterial;
+			}
+			else
+			{
+				throw "no default material set."
+			}
 		}
 		
+		model.setMaterial(material);
 		node.model = model;
 
 		// parse transformation
@@ -125,7 +143,7 @@ MojitoLoader.parseNode = function(contentNode)
 		{
 			$.each($(childrenNode).children(), function()
 			{
-				node.append(MojitoLoader.parseNode(this));
+				node.append(MojitoLoader.parseNode(this, material));
 			});
 		}
 	}
@@ -146,6 +164,35 @@ MojitoLoader.parseNode = function(contentNode)
 			mat4.transpose(transformationMatrix);
 			mat4.set(transformationMatrix, node.transformation);
 		}
+		
+		var material = null;
+		
+		// parse materials
+		if($(contentNode).children("material")[0])
+		{
+			var materialName = $(contentNode).children("material")[0].textContent;
+			var materialObject = Mp3D.materials[materialName];
+			if(!materialObject)
+			{
+				throw "material '"+materialName+"' is not defined in materials.xml";
+			}
+			material = materialObject;
+		}
+		else if(parentMaterial)
+		{
+			material = parentMaterial;
+		}
+		else
+		{
+			if(Mp3D.defaultMaterial)
+			{
+				material = Mp3D.defaultMaterial;
+			}
+			else
+			{
+				throw "no default material set."
+			}
+		}
 	
 		// parse children
 		var childrenNode = $(contentNode).children("children")[0];
@@ -153,7 +200,7 @@ MojitoLoader.parseNode = function(contentNode)
 		{
 			$.each($(childrenNode).children(), function()
 			{
-				node.append(MojitoLoader.parseNode(this));
+				node.append(MojitoLoader.parseNode(this, material));
 			});
 		}
 	}
