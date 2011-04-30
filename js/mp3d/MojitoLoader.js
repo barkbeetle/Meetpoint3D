@@ -19,8 +19,8 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 	if(contentNode.nodeName.toLowerCase() == "polygon")
 	{	
 		var vertices = $(contentNode).children("vertices")[0].textContent;
-		var uvCoords = $(contentNode).children("uvset")[0].textContent;
 		var normals = $(contentNode).children("normals")[0].textContent;
+		var uvCoords = $(contentNode).children("uvset")[0].textContent;
 		var faces = $(contentNode).children("faces")[0].textContent;
 		var transformation = $(contentNode).children("transformation")[0].textContent;
 		

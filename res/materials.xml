@@ -1,9 +1,34 @@
 <?xml version="1.0"?>
 <materials>
+	<material name="TurretWhite">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="DDDDDD"/>
+		</attributes>
+	</material>
+	<material name="TurretBlack">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="333333"/>
+		</attributes>
+	</material>
+	<material name="TurretEye">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="FF0000"/>
+		</attributes>
+	</material>
+
 	<material name="LightGray" default="true">
 		<class name="SimpleColorMaterial"/>
 		<attributes>
 			<string name="color" value="CCCCCC"/>
+		</attributes>
+	</material>
+	<material name="Black">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="000000"/>
 		</attributes>
 	</material>
 	<material name="Red">
