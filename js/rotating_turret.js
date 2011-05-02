@@ -17,7 +17,7 @@ function prepare()
 
 function loadResources()
 {
-	ResourceManager.addRequest("turret", "res/turret.moj");
+	ResourceManager.addRequest("turret", "res/turret2.moj");
 	ResourceManager.addDependencies(["turret"], setupScene);
 	ResourceManager.loadAll();
 }
@@ -38,8 +38,9 @@ function setupScene()
 	
 	// add turret
 	turret = MojitoLoader.parseMojito(ResourceManager.data.turret);
-	turret.translate([0, -2, -10]);
+	turret.translate([0, -1, -5]);
 	turret.scale([0.008, 0.008, 0.008]);
+	turret.rotate(Mp3D.degToRad(180), [0, 1, 0]);
 	world.nodes.push(turret);
 
 	

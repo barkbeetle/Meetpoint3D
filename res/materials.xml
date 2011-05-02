@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <materials>
+	<material name="TurretGray">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="AAAAAA"/>
+		</attributes>
+	</material>
 	<material name="TurretWhite">
 		<class name="SimpleColorMaterial"/>
 		<attributes>
@@ -13,9 +19,9 @@
 		</attributes>
 	</material>
 	<material name="TurretEye">
-		<class name="SimpleColorMaterial"/>
+		<class name="SimpleTextureMaterial"/>
 		<attributes>
-			<string name="color" value="FF0000"/>
+			<string name="texture" value="res/turret_eye.png"/>
 		</attributes>
 	</material>
 
