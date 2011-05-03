@@ -24,6 +24,12 @@
 			<string name="texture" value="res/turret_eye.png"/>
 		</attributes>
 	</material>
+	<material name="TurretBeam">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="FF0000"/>
+		</attributes>
+	</material>
 
 	<material name="LightGray" default="true">
 		<class name="SimpleColorMaterial"/>
