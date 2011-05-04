@@ -21,7 +21,7 @@
 	<material name="TurretEye">
 		<class name="SimpleTextureMaterial"/>
 		<attributes>
-			<string name="texture" value="res/turret_eye.png"/>
+			<string name="texture" value="res/models/turret/turret_eye.png"/>
 		</attributes>
 	</material>
 	<material name="TurretBeam">
@@ -64,7 +64,13 @@
 	<material name="CompanionCube">
 		<class name="SimpleTextureMaterial"/>
 		<attributes>
-			<string name="texture" value="res/cube1.png"/>
+			<string name="texture" value="res/models/shapes/cube1.png"/>
+		</attributes>
+	</material>
+	<material name="Earth">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/models/shapes/earth.png"/>
 		</attributes>
 	</material>
 </materials>

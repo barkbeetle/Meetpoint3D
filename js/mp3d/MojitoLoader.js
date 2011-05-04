@@ -3,16 +3,24 @@ MojitoLoader = new Object();
 MojitoLoader.parseMojito = function(mojito)
 {
 	var rootNode = new Node();
-	
-	$(mojito).children("nodes").children().each(function()
+	$(mojito.firstChild).children("nodes").children().each(function()
 	{
-		rootNode.append(MojitoLoader.parseNode(this, null));
+		rootNode.append(MojitoLoader.parseNode(this, new Object()));
 	});
+	
+	/*var x = mat4.create();
+	mat4.identity(x);
+	mat4.scale(x, [-1, 1, 1]);
+	mat4.inverse(x, x);
+	
+	mat4.multiply(x, rootNode.transformation, rootNode.transformation);*/
+	
+	//rootNode.scale([-1, 1, 1]);
 	
 	return rootNode;
 }
 
-MojitoLoader.parseNode = function(contentNode, parentMaterial)
+MojitoLoader.parseNode = function(contentNode, parentProperties)
 {
 	var node = new Node();
 
@@ -35,7 +43,7 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 		var allUVCoords = new Array();
 		$.each(uvCoords.split(" "), function()
 		{
-			allUVCoords.push(parseFloat(this)*-1);
+			allUVCoords.push(parseFloat(this));
 		});
 		
 		// parse normals
@@ -104,9 +112,9 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 			}
 			material = materialObject;
 		}
-		else if(parentMaterial)
+		else if(parentProperties.material)
 		{
-			material = parentMaterial;
+			material = parentProperties.material;
 		}
 		else
 		{
@@ -121,6 +129,7 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 		}
 		
 		model.setMaterial(material);
+		parentProperties.material = material;
 		node.model = model;
 
 		// parse transformation
@@ -143,7 +152,7 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 		{
 			$.each($(childrenNode).children(), function()
 			{
-				node.append(MojitoLoader.parseNode(this, material));
+				node.append(MojitoLoader.parseNode(this, parentProperties));
 			});
 		}
 	}
@@ -178,9 +187,9 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 			}
 			material = materialObject;
 		}
-		else if(parentMaterial)
+		else if(parentProperties.material)
 		{
-			material = parentMaterial;
+			material = parentProperties.material;
 		}
 		else
 		{
@@ -190,7 +199,7 @@ MojitoLoader.parseNode = function(contentNode, parentMaterial)
 			}
 			else
 			{
-				throw "no default material set."
+				throw "no default material set.";
 			}
 		}
 	

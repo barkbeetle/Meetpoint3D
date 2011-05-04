@@ -16,7 +16,7 @@ Mp3D.init = function()
 	// register all resources needed for the game to startup
 
 	// material definition
-	ResourceManager.addRequest("materialDefinition", "res/materials.xml");
+	ResourceManager.addRequest("materialDefinition", "res/materials.xml", "xml");
 	ResourceManager.addDependency("materialDefinition", Mp3D.setup);
 
 	// material resources (only the ones which cannot be loaded at runtime)
@@ -118,7 +118,7 @@ Mp3D.createMaterials = function()
 	}
 	
 	// read materials from config file
-	materialDefinition = ResourceManager.data.materialDefinition;
+	var materialDefinition = ResourceManager.data.materialDefinition;
 	if(materialDefinition)
 	{
 		$(materialDefinition).children("materials").children("material").each(function()

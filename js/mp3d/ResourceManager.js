@@ -4,7 +4,7 @@ ResourceManager.requests = new Array();
 ResourceManager.dependencies = new Array();
 ResourceManager.data = new Array();
 
-ResourceManager.addRequest = function(name, url)
+ResourceManager.addRequest = function(name, url, type)
 {
 	if(ResourceManager.requests[name])
 	{
@@ -12,7 +12,7 @@ ResourceManager.addRequest = function(name, url)
 	}
 	else
 	{
-		ResourceManager.requests[name] = url;
+		ResourceManager.requests[name] = {url:url, type:type};
 	}
 }
 
@@ -47,7 +47,37 @@ ResourceManager.loadAll = function()
 
 ResourceManager.loadResource = function(name)
 {
-	$.get(ResourceManager.requests[name], function(data)
+	$.ajax({
+		url: ResourceManager.requests[name].url,
+		type: "GET",
+		dataType: ResourceManager.requests[name].type,
+		success: function(data)
+		{
+			ResourceManager.data[name] = data;
+			
+			var func = ResourceManager.dependencies[name];
+			if(func)
+			{
+				delete ResourceManager.dependencies[name];
+			
+				var isOnlyDependency = true;
+				for(otherName in ResourceManager.dependencies)
+				{
+					if(String(ResourceManager.dependencies[otherName]) == String(func))
+					{
+						isOnlyDependency = false;
+					}
+				}
+				
+				if(isOnlyDependency)
+				{
+					func();
+				}
+			}
+		}
+	});
+
+	/*$.get(ResourceManager.requests[name], function(data)
 	{
 		ResourceManager.data[name] = data;
 		delete ResourceManager.requests[name];
@@ -71,5 +101,5 @@ ResourceManager.loadResource = function(name)
 				func();
 			}
 		}	
-	});
+	});*/
 };

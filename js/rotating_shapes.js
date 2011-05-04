@@ -17,9 +17,9 @@ function prepare()
 
 function loadResources()
 {
-	ResourceManager.addRequest("cube1", "res/cube1.moj");
-	ResourceManager.addRequest("sphere1", "res/sphere1.moj");
-	ResourceManager.addRequest("torus1", "res/torus1.moj");
+	ResourceManager.addRequest("cube1", "res/models/shapes/cube1.moj", "xml");
+	ResourceManager.addRequest("sphere1", "res/models/shapes/sphere1.moj", "xml");
+	ResourceManager.addRequest("torus1", "res/models/shapes/torus1.moj", "xml");
 	ResourceManager.addDependencies(["cube1", "sphere1", "torus1"], setupScene);
 	ResourceManager.loadAll();
 }
@@ -48,6 +48,7 @@ function setupScene()
 	sphereNode = MojitoLoader.parseMojito(ResourceManager.data.sphere1);
 	sphereNode.translate([-2, -1, -10]);
 	sphereNode.scale([0.015, 0.015, 0.015]);
+	sphereNode.rotate(Mp3D.degToRad(-10), [-1, 0, -1]);
 	world.nodes.push(sphereNode);
 
 	
@@ -79,7 +80,7 @@ function main()
 	timeBefore = timeNow;
 
 	cubeNode.rotate(Mp3D.degToRad(10)*elapsed, [2, 1, 1]);
-	sphereNode.rotate(Mp3D.degToRad(20)*elapsed, [2, 1, 1]);
+	sphereNode.rotate(Mp3D.degToRad(20)*elapsed, [0, 1, 0]);
 	torusNode.rotate(Mp3D.degToRad(30)*elapsed, [2, 1, 1]);
 
 	Mp3D.drawScene();
