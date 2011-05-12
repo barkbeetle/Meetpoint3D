@@ -96,11 +96,17 @@ Mp3D.setupViewport = function()
 	Mp3D.gl.viewport(0, 0, Mp3D.gl.viewportWidth, Mp3D.gl.viewportHeight);
 	Mp3D.gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
 	
+	// model view matrix
 	Mp3D.mvMatrix = mat4.create();
 	mat4.identity(Mp3D.mvMatrix);
-  	Mp3D.pMatrix = mat4.create();
 	
+	// projection matrix
+  	Mp3D.pMatrix = mat4.create();
 	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 10000.0, Mp3D.pMatrix);
+
+	// normal matrix
+	Mp3D.normalMatrix = mat3.create();
+	mat3.identity(Mp3D.normalMatrix);
 }
 
 Mp3D.registerMaterialClass = function(materialClass)
@@ -244,16 +250,35 @@ Mp3D.drawScene = function()
 {
 	// clear screen
 	Mp3D.gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
-
+	
+	if(Mp3D.activeWorld.camera)
+	{
+		mat4.inverse(Mp3D.activeWorld.camera.getTransformation(), Mp3D.mvMatrix);
+	}
+	
+	// calculate normal matrix
+    mat4.toInverseMat3(Mp3D.mvMatrix, Mp3D.normalMatrix);
+    mat3.transpose(Mp3D.normalMatrix);   
+    
+    $.each(Mp3D.activeWorld.lights, function()
+	{
+	    // set light direction relative to camera		
+		mat4.multiplyVec3(mat3.toMat4(Mp3D.normalMatrix), Mp3D.activeWorld.lights[0].direction, Mp3D.activeWorld.lights[0].relativeDirection);
+	});
+    
+    // modify light 
+	var newDirection = [];		
+	mat4.multiplyVec3(mat3.toMat4(Mp3D.normalMatrix), Mp3D.activeWorld.lights[0].direction, newDirection);
+			
 	$.each(Mp3D.activeWorld.nodes, function()
 	{
-		this.draw();
+		this.draw(Mp3D.mvMatrix);
 	});
 }
 
 Mp3D.degToRad = function(degAngle)
 {
-	return (degAngle/180*Math.PI) % 2*Math.PI;
+	return (degAngle/180*Math.PI);
 }
 
 Mp3D.error = function(text)

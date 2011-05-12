@@ -54,8 +54,8 @@ Model.prototype.setMaterial = function(material)
 	this.material = material;
 }
 
-Model.prototype.draw = function()
+Model.prototype.draw = function(mvMatrix)
 {
-	this.material.drawModel(this);
+	this.material.drawModel(this, mvMatrix);
 }
 

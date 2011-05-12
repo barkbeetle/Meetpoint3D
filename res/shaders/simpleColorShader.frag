@@ -9,5 +9,4 @@ varying vec3 lightedColor;
 void main(void)
 {
 	gl_FragColor = vec4(color * lightedColor, 1);
-	//gl_FragColor = vec4(1, 1, 1, 1);
 }

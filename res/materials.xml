@@ -61,6 +61,12 @@
 			<string name="color" value="0000FF"/>
 		</attributes>
 	</material>
+	<material name="Yellow">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="FFFF00"/>
+		</attributes>
+	</material>
 	<material name="CompanionCube">
 		<class name="SimpleTextureMaterial"/>
 		<attributes>

@@ -40,10 +40,9 @@ function setupScene()
 	turret = MojitoLoader.parseMojito(ResourceManager.data.turret);
 	turret.translate([0, -1, -4]);
 	turret.scale([0.008, 0.008, 0.008]);
-	turret.rotate(Mp3D.degToRad(180), [0, 1, 0]);
+	turret.rotate(Mp3D.degToRad(-20), [0, 1, 0]);
 	world.nodes.push(turret);
 
-	
 	startGame();
 }
 

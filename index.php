@@ -14,10 +14,11 @@
 		<script type="text/javascript" src="js/mp3d/Model.js"></script>
 		<script type="text/javascript" src="js/mp3d/World.js"></script>
 		<script type="text/javascript" src="js/mp3d/Light.js"></script>
+		<script type="text/javascript" src="js/mp3d/Camera.js"></script>
 		<script type="text/javascript" src="js/mp3d/MojitoLoader.js"></script>
 		<script type="text/javascript" src="js/mp3d/SimpleColorMaterial.js"></script>
 		<script type="text/javascript" src="js/mp3d/SimpleTextureMaterial.js"></script>
-		<script type="text/javascript" src="js/rotating_turret.js"></script>
+		<script type="text/javascript" src="js/character1.js"></script>
 	</head>
 	<body>
 		<div id="header"></div>

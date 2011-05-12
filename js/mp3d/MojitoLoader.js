@@ -8,15 +8,6 @@ MojitoLoader.parseMojito = function(mojito)
 		rootNode.append(MojitoLoader.parseNode(this, new Object()));
 	});
 	
-	/*var x = mat4.create();
-	mat4.identity(x);
-	mat4.scale(x, [-1, 1, 1]);
-	mat4.inverse(x, x);
-	
-	mat4.multiply(x, rootNode.transformation, rootNode.transformation);*/
-	
-	//rootNode.scale([-1, 1, 1]);
-	
 	return rootNode;
 }
 

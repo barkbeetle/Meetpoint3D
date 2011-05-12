@@ -24,5 +24,4 @@ void main(void)
 	
 	float lightIntensity = max(dot(transformedNormal, direction), 0.0);
 	lightedColor = (ambientColor + (diffuseColor-ambientColor) * lightIntensity).rgb;
-
 }

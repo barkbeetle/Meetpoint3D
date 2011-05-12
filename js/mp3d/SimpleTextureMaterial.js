@@ -70,32 +70,33 @@ SimpleTextureMaterial.disable = function()
     Mp3D.gl.disableVertexAttribArray(SimpleTextureMaterial.shaderProgram.vertexTexCoordAttribute);
 }
 
-SimpleTextureMaterial.setMatrixUniforms = function()
+SimpleTextureMaterial.setMatrixUniforms = function(mvMatrix)
 {
 	// set modelview and projection matrix
 	Mp3D.gl.uniformMatrix4fv(SimpleTextureMaterial.shaderProgram.pMatrixUniform, false, Mp3D.pMatrix);
-	Mp3D.gl.uniformMatrix4fv(SimpleTextureMaterial.shaderProgram.mvMatrixUniform, false, Mp3D.mvMatrix);
+	Mp3D.gl.uniformMatrix4fv(SimpleTextureMaterial.shaderProgram.mvMatrixUniform, false, mvMatrix);
 	
-	// set normal matrix
+	// calculate and set normal matrix
 	var normalMatrix = mat3.create();
-    mat4.toInverseMat3(Mp3D.mvMatrix, normalMatrix);
+    mat4.toInverseMat3(mvMatrix, normalMatrix);
     mat3.transpose(normalMatrix);
+
     Mp3D.gl.uniformMatrix3fv(SimpleTextureMaterial.shaderProgram.nMatrixUniform, false, normalMatrix);
 
 	// set light information (if available)
 	if(Mp3D.activeWorld && Mp3D.activeWorld.lights[0])
-	{
-		Mp3D.gl.uniform3fv(SimpleTextureMaterial.shaderProgram.lightDirection, Mp3D.activeWorld.lights[0].direction);
+	{	
+		Mp3D.gl.uniform3fv(SimpleTextureMaterial.shaderProgram.lightDirection, Mp3D.activeWorld.lights[0].relativeDirection);
 		Mp3D.gl.uniform3fv(SimpleTextureMaterial.shaderProgram.lightAmbientColor, Mp3D.activeWorld.lights[0].ambientColor);
 		Mp3D.gl.uniform3fv(SimpleTextureMaterial.shaderProgram.lightDiffuseColor, Mp3D.activeWorld.lights[0].diffuseColor);
 	}
 }
 
-SimpleTextureMaterial.prototype.drawModel = function(model)
+SimpleTextureMaterial.prototype.drawModel = function(model, mvMatrix)
 {
 	Mp3D.gl.useProgram(SimpleTextureMaterial.shaderProgram);
 	SimpleTextureMaterial.enable();
-	SimpleTextureMaterial.setMatrixUniforms();
+	SimpleTextureMaterial.setMatrixUniforms(mvMatrix);
 
 	Mp3D.gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, model.vertexPositionBuffer);
     Mp3D.gl.vertexAttribPointer(SimpleTextureMaterial.shaderProgram.vertexPositionAttribute, model.vertexPositionBuffer.itemSize, WebGLRenderingContext.FLOAT, false, 0, 0);
