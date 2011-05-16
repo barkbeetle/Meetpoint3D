@@ -30,6 +30,13 @@
 			<string name="color" value="FF0000"/>
 		</attributes>
 	</material>
+	
+	<material name="Pavement1">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/models/level1/pavement1.png"/>
+		</attributes>
+	</material>
 
 	<material name="LightGray" default="true">
 		<class name="SimpleColorMaterial"/>
@@ -59,6 +66,12 @@
 		<class name="SimpleColorMaterial"/>
 		<attributes>
 			<string name="color" value="0000FF"/>
+		</attributes>
+	</material>
+	<material name="BlueGreen">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="0077BB"/>
 		</attributes>
 	</material>
 	<material name="Yellow">
