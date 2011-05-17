@@ -49,6 +49,16 @@ Node.prototype.append = function(node)
 	this.children.push(node);
 }
 
+Node.prototype.detach = function(node)
+{
+	
+}
+
+Node.prototype.resetTransformation = function()
+{
+	mat4.identity(this.transformation);
+}
+
 Node.prototype.translate = function(vector)
 {
 	mat4.translate(this.transformation, vector);

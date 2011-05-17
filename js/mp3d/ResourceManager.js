@@ -54,6 +54,7 @@ ResourceManager.loadResource = function(name)
 		success: function(data)
 		{
 			ResourceManager.data[name] = data;
+			delete ResourceManager.requests[name];
 			
 			var func = ResourceManager.dependencies[name];
 			if(func)
@@ -74,7 +75,8 @@ ResourceManager.loadResource = function(name)
 					func();
 				}
 			}
-		}
+		},
+		error: function(error){alert("error");}
 	});
 
 	/*$.get(ResourceManager.requests[name], function(data)

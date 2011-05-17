@@ -1,5 +1,9 @@
 key = new Array();
 ignoredKeys = [37, 38, 39, 40];
+serverAddress = "http://newtonweb.dyndns.org:1024";
+
+myClient = new Client();
+otherClients = [];
 
 Array.prototype.contains = function(value)
 {
@@ -22,22 +26,22 @@ $(document).ready(function()
 		{
 			if(ignoredKeys.contains(event.which))
 			{
-				event.preventDefault(); //prevent from doing whatever this key is supposed to do
+				event.preventDefault();
 			}
 			key[event.which] = true;
 	
 		});
 		$(window).keyup(function(event)
 		{
-			key[event.which] = false;			
+			key[event.which] = false;
 		});
-		
 	}
 });
 
 function prepare()
 {
-	loadResources();
+	clientId = -1
+	joinGame(0);
 }
 
 function loadResources()
@@ -55,7 +59,7 @@ function setupScene()
 	Mp3D.activeWorld = world;
 	
 	var light = new Light();
-	light.direction = [0, -1, -1];
+	light.direction = [1, -1, -2];
 	light.ambientColor = [0.2, 0.2, 0.2];
 	light.diffuseColor = [1.0, 1.0, 1.0];
 	light.specularColor = [1.0, 1.0, 1.0];
@@ -69,9 +73,6 @@ function setupScene()
 	
 	// add character
 	character1 = MojitoLoader.parseMojito(ResourceManager.data.character1);
-	character1.translate([0, 0, 50]);
-	character1.scale([0.008, 0.008, 0.008]);
-	//character1.rotate(Mp3D.degToRad(180), [0, 1, 0]);
 	world.nodes.push(character1);
 	
 	level1 = MojitoLoader.parseMojito(ResourceManager.data.level1);
@@ -84,6 +85,12 @@ function setupScene()
 
 	cameraNode.translate([0, 200, 1000]);
 	character1.append(cameraNode);
+	
+	myClient.node = character1;
+	myClient.scale =  0.008;
+	myClient.xPosition = 0;
+	myClient.zPosition = 40;
+	myClient.angle = 0;
 
 	startGame();
 }
@@ -91,6 +98,7 @@ function setupScene()
 function startGame()
 {
 	timeBefore = 0;
+	sendCoordinates();
 	main();
 }
 
@@ -108,27 +116,154 @@ function main()
 	if(key[37])
 	{
 		// turn left
-		character1.rotate(Mp3D.degToRad(90)*elapsed, [0, 1, 0]);
+		myClient.rotate(90*elapsed);
+	}
+	if(key[39])
+	{
+		// turn right
+		myClient.rotate(-90*elapsed);
 	}
 	if(key[38])
 	{
 		// move forward
-		character1.translate([0, 0, -1000*elapsed]);
-	}
-
-	if(key[39])
-	{
-		// turn right
-		character1.rotate(Mp3D.degToRad(-90)*elapsed, [0, 1, 0]);
+		myClient.move(10*elapsed);
 	}
 	if(key[40])
 	{
 		// move backward
-		character1.translate([0, 0, 1000*elapsed]);
+		myClient.move(-10*elapsed);
+	}
+	
+	myClient.updateNode();
+	
+	
+	for(var clientId in otherClients)
+	{
+		if(clientId != "contains")
+		{
+			otherClients[clientId].updateNode();
+		}
 	}
 
 	Mp3D.drawScene();
 	requestAnimFrame(main);
 }
 
+function joinGame(characterId)
+{
+	$.ajax({
+		url: serverAddress+"/register?"+characterId,
+		type: "GET",
+		dataType: "text",
+		success: function(data)
+		{
+			myClient.clientId = data;
+			loadResources();
+		},
+		error: function(error)
+		{
+			Mp3D.error(error.responseText);
+		}
+	});
+}
+
+function sendCoordinates()
+{
+	var informationString = myClient.getInformationString();
+	$.ajax({
+		url: serverAddress+"/position?"+informationString,
+		type: "GET",
+		dataType: "text",
+		success: receiveCoordinates,
+	});
+}
+
+function receiveCoordinates(data)
+{
+	var clientsToRemove = []
+	for(var clientId in otherClients)
+	{
+		if(clientId != "contains")
+		{
+			clientsToRemove[clientId] = true;
+		}
+	}
+	
+	var allClients = data.split("\n");
+	$.each(allClients, function()
+	{
+		var clientInfo = this.split(";");
+		
+		var clientId = clientInfo[0];
+		var characterId = clientInfo[1];
+		var xPosition = parseFloat(clientInfo[2]);
+		var zPosition = parseFloat(clientInfo[3]);
+		var angle = parseFloat(clientInfo[4]);
+		
+		delete clientsToRemove[clientId];
+		
+		if(clientId && clientId != myClient.clientId)
+		{
+			var client = otherClients[clientId];
+			if(client)
+			{
+				// client already exists, update position and angle
+				client.newXPosition = xPosition;
+				client.newZPosition = zPosition;
+				client.newAngle = angle;
+			}
+			else
+			{
+				// new client
+				client = new Client();
+				client.clientId = clientId;
+				client.characterId = characterId;
+				
+				var modelAddress = "res/models/characters/character2.moj";
+				
+				$.ajax({
+					url: modelAddress,
+					type: "GET",
+					dataType: "xml",
+					success: function(data)
+					{
+						loadClientCharacter(client, data);
+					}
+				});
+					
+				client.scale = 0.008;
+				client.xPosition = xPosition;
+				client.zPosition = zPosition;
+				client.angle = angle;
+				client.newXPosition = xPosition;
+				client.newZPosition = zPosition;
+				client.newAngle = angle;
+				client.smoothMovements = true;
+				
+				otherClients[client.clientId] = client;
+			}
+		}
+	});
+	
+	
+	// remove clients which are not on the list
+	for(var clientId in clientsToRemove)
+	{
+		if(clientId != "contains")
+		{
+			Mp3D.activeWorld.nodes.splice(Mp3D.activeWorld.nodes.indexOf(otherClients[clientId].node), 1);
+			delete otherClients[clientId];
+		}
+	}
+	
+	setTimeout(sendCoordinates, 100);
+}
+
+function loadClientCharacter(client, modelData)
+{
+	var character = MojitoLoader.parseMojito(modelData);
+	Mp3D.activeWorld.nodes.push(character);
+	client.node = character;
+	client.updateNode();
+}
 
