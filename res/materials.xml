@@ -50,6 +50,12 @@
 			<string name="color" value="000000"/>
 		</attributes>
 	</material>
+	<material name="White">
+		<class name="SimpleColorMaterial"/>
+		<attributes>
+			<string name="color" value="FFFFFF"/>
+		</attributes>
+	</material>
 	<material name="Red">
 		<class name="SimpleColorMaterial"/>
 		<attributes>

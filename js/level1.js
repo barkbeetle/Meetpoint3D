@@ -1,5 +1,7 @@
 key = new Array();
 ignoredKeys = [37, 38, 39, 40];
+
+//serverAddress = "http://localhost:1024";
 serverAddress = "http://newtonweb.dyndns.org:1024";
 
 myClient = new Client();
@@ -35,20 +37,31 @@ $(document).ready(function()
 		{
 			key[event.which] = false;
 		});
+		
+		characterId = Math.floor(Math.random()*3);
 	}
 });
 
 function prepare()
 {
-	clientId = -1
-	joinGame(0);
+	joinGame(characterId);
 }
 
 function loadResources()
 {
+	var characterModel = "";
+	
+	if(characterId == 0)
+		characterModel = "res/models/characters/character1.moj";
+	else if(characterId == 1)
+		characterModel = "res/models/characters/character2.moj";
+	else
+		characterModel = "res/models/characters/character3.moj";
+
 	ResourceManager.addRequest("level1", "res/models/level1/level1.moj", "xml");
-	ResourceManager.addRequest("character1", "res/models/characters/character1.moj", "xml");
-	ResourceManager.addDependencies(["character1", "level1"], setupScene);
+	ResourceManager.addRequest("character1", characterModel, "xml");
+	ResourceManager.addRequest("bubble1", "res/models/characters/bubble1.moj", "xml");
+	ResourceManager.addDependencies(["level1", "character1", "bubble1"], setupScene);
 	ResourceManager.loadAll();
 }
 
@@ -74,6 +87,7 @@ function setupScene()
 	// add character
 	character1 = MojitoLoader.parseMojito(ResourceManager.data.character1);
 	world.nodes.push(character1);
+	bubble1 = MojitoLoader.parseMojito(ResourceManager.data.bubble1);
 	
 	level1 = MojitoLoader.parseMojito(ResourceManager.data.level1);
 	level1.translate([0, 0, 0]);
@@ -84,13 +98,17 @@ function setupScene()
 	cameraNode.rotate(Mp3D.degToRad(-8), [1, 0, 0]);
 
 	cameraNode.translate([0, 200, 1000]);
+	
 	character1.append(cameraNode);
+	character1.append(bubble1);
 	
 	myClient.node = character1;
 	myClient.scale =  0.008;
 	myClient.xPosition = 0;
 	myClient.zPosition = 40;
 	myClient.angle = 0;
+	
+	myClient.bubbleNode = bubble1;
 
 	startGame();
 }
@@ -135,12 +153,13 @@ function main()
 	}
 	
 	myClient.updateNode();
-	
+	myClient.bubbleAngle += 90*elapsed;
 	
 	for(var clientId in otherClients)
 	{
 		if(clientId != "contains")
 		{
+			otherClients[clientId].bubbleAngle += 90*elapsed;
 			otherClients[clientId].updateNode();
 		}
 	}
@@ -157,6 +176,7 @@ function joinGame(characterId)
 		dataType: "text",
 		success: function(data)
 		{
+			console.log("I am "+data);
 			myClient.clientId = data;
 			loadResources();
 		},
@@ -175,6 +195,10 @@ function sendCoordinates()
 		type: "GET",
 		dataType: "text",
 		success: receiveCoordinates,
+		error: function(error)
+		{
+			Mp3D.error(error.responseText);
+		}
 	});
 }
 
@@ -192,55 +216,109 @@ function receiveCoordinates(data)
 	var allClients = data.split("\n");
 	$.each(allClients, function()
 	{
-		var clientInfo = this.split(";");
-		
-		var clientId = clientInfo[0];
-		var characterId = clientInfo[1];
-		var xPosition = parseFloat(clientInfo[2]);
-		var zPosition = parseFloat(clientInfo[3]);
-		var angle = parseFloat(clientInfo[4]);
-		
-		delete clientsToRemove[clientId];
-		
-		if(clientId && clientId != myClient.clientId)
-		{
-			var client = otherClients[clientId];
-			if(client)
+		if(this.substr(0, 1) == "@")
+		{		
+			// chat message
+			var delimiterPos = this.indexOf(";");
+			var sender = this.substr(1, delimiterPos-1)
+			var message = this.substr(delimiterPos+1, this.length-delimiterPos-1);
+			
+			var paragraph = document.createElement("p");
+			var bold = document.createElement("b");
+			var senderNode = document.createTextNode(unescape(sender)+":");
+			var spaceNode = document.createElement();
+			var messageNode = document.createTextNode(unescape(message));
+			
+			spaceNode.innerHTML = "&nbsp;";
+			
+			bold.appendChild(senderNode);
+			paragraph.appendChild(bold);
+			bold.appendChild(spaceNode);
+			paragraph.appendChild(messageNode);
+			
+			$("#chat").prepend(paragraph);
+			
+			if(sender == myClient.clientId)
 			{
-				// client already exists, update position and angle
-				client.newXPosition = xPosition;
-				client.newZPosition = zPosition;
-				client.newAngle = angle;
+				myClient.lastSpeaking = new Date().getTime();
 			}
 			else
 			{
-				// new client
-				client = new Client();
-				client.clientId = clientId;
-				client.characterId = characterId;
-				
-				var modelAddress = "res/models/characters/character2.moj";
-				
-				$.ajax({
-					url: modelAddress,
-					type: "GET",
-					dataType: "xml",
-					success: function(data)
-					{
-						loadClientCharacter(client, data);
-					}
-				});
+				otherClients[sender].lastSpeaking = new Date().getTime();
+			}
+		}
+		else
+		{
+			// client information
+			var clientInfo = this.split(";");
+			
+			var clientId = clientInfo[0];
+			var characterId = clientInfo[1];
+			var xPosition = parseFloat(clientInfo[2]);
+			var zPosition = parseFloat(clientInfo[3]);
+			var angle = parseFloat(clientInfo[4]);
+			
+			delete clientsToRemove[clientId];
+			
+			if(clientId && clientId != myClient.clientId)
+			{
+				var client = otherClients[clientId];
+				if(client)
+				{
+					// client already exists, update position and angle
+					client.newXPosition = xPosition;
+					client.newZPosition = zPosition;
+					client.newAngle = angle;
+				}
+				else
+				{
+					// new client
+					client = new Client();
+					client.clientId = clientId;
+					client.characterId = characterId;
 					
-				client.scale = 0.008;
-				client.xPosition = xPosition;
-				client.zPosition = zPosition;
-				client.angle = angle;
-				client.newXPosition = xPosition;
-				client.newZPosition = zPosition;
-				client.newAngle = angle;
-				client.smoothMovements = true;
+					var characterModel = "res/models/characters/character2.moj";
+					var bubbleModel = "res/models/characters/bubble1.moj";
+					
+					if(characterId == 0)
+						characterModel = "res/models/characters/character1.moj";
+					else if(characterId == 1)
+						characterModel = "res/models/characters/character2.moj";
+					else
+						characterModel = "res/models/characters/character3.moj";
 				
-				otherClients[client.clientId] = client;
+					
+					$.ajax({
+						url: characterModel,
+						type: "GET",
+						dataType: "xml",
+						success: function(data)
+						{
+							loadClientCharacter(client, data);
+						}
+					});
+					
+					$.ajax({
+						url: bubbleModel,
+						type: "GET",
+						dataType: "xml",
+						success: function(data)
+						{
+							loadClientBubble(client, data);
+						}
+					});
+						
+					client.scale = 0.008;
+					client.xPosition = xPosition;
+					client.zPosition = zPosition;
+					client.angle = angle;
+					client.newXPosition = xPosition;
+					client.newZPosition = zPosition;
+					client.newAngle = angle;
+					client.smoothMovements = true;
+					
+					otherClients[client.clientId] = client;
+				}
 			}
 		}
 	});
@@ -264,6 +342,38 @@ function loadClientCharacter(client, modelData)
 	var character = MojitoLoader.parseMojito(modelData);
 	Mp3D.activeWorld.nodes.push(character);
 	client.node = character;
+	if(client.bubbleNode)
+	{
+		client.node.append(client.bubbleNode);
+	}
 	client.updateNode();
+}
+
+function loadClientBubble(client, modelData)
+{
+	var bubble = MojitoLoader.parseMojito(modelData);
+	if(client.node)
+	{
+		client.node.append(bubble);
+	}
+	client.bubbleNode = bubble;
+}
+
+function sendMessage()
+{
+	var message = escape($("#chat_input")[0].value);
+	$("#chat_input")[0].value = ""
+	if(message)
+	{
+		$.ajax({
+			url: serverAddress+"/chat?"+myClient.clientId+"&"+message,
+			type: "GET",
+			dataType: "text",
+			error: function(error)
+			{
+				Mp3D.error(error.responseText);
+			}
+		});
+	}
 }
 

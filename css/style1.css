@@ -110,6 +110,34 @@ img
 	font-style:italic;
 }
 
+#chat
+{
+	font-size:10pt;
+	margin-top:0px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:0px;
+	padding-bottom:10px;
+	background-color:#BBDDFF;
+	height:200px;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+
+
+#chat p
+{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+#chat_input
+{
+	width:250px;
+	margin-left:20px;
+	margin-right:10px;
+}
+
 .hidden
 {
 	display:none;

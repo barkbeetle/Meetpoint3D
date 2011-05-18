@@ -3,6 +3,7 @@ function Client()
 	this.clientId = null;
 	this.characterId = null;
 	this.node = null;
+	this.bubbleNode = null;
 	this.scale = 1;
 	this.xPosition = 0;
 	this.zPosition = 0;
@@ -11,6 +12,8 @@ function Client()
 	this.newZPosition = 0;
 	this.newAngle = 0;
 	this.smoothMovements = false;
+	this.lastSpeaking = 0;
+	this.bubbleAngle = 0;
 }
 
 Client.prototype.rotate = function(rotAngle)
@@ -40,6 +43,19 @@ Client.prototype.updateNode = function()
 		this.node.translate([this.xPosition, 0, this.zPosition]);
 		this.node.rotate(Mp3D.degToRad(this.angle), [0, 1, 0]);
 		this.node.scale([this.scale, this.scale, this.scale]);
+		
+		if(this.bubbleNode)
+		{
+			if(this.lastSpeaking > (new Date().getTime()-3000))
+			{
+				this.bubbleNode.resetTransformation();
+				this.bubbleNode.rotate(Mp3D.degToRad(this.bubbleAngle), [0, 1, 0]);
+			}
+			else
+			{
+				this.bubbleNode.scale([0, 0, 0]);
+			}
+		}
 	}
 }
 
