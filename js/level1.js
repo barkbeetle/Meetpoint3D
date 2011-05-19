@@ -128,7 +128,8 @@ function startGame()
 
 function main()
 {
-	var timeNow = new Date().getTime();
+	var d = new Date();
+	var timeNow = d.getTime();
 	
     if(timeBefore)
     	elapsed = (timeNow-timeBefore)/1000;
@@ -226,13 +227,13 @@ function receiveCoordinates(data)
 		{		
 			// chat message
 			var delimiterPos = this.indexOf(";");
-			var sender = this.substr(1, delimiterPos-1)
+			var sender = this.substr(1, delimiterPos-1);
 			var message = this.substr(delimiterPos+1, this.length-delimiterPos-1);
 			
 			var paragraph = document.createElement("p");
 			var bold = document.createElement("b");
 			var senderNode = document.createTextNode(unescape(sender)+":");
-			var spaceNode = document.createElement();
+			var spaceNode = document.createElement("span");
 			var messageNode = document.createTextNode(unescape(message));
 			
 			spaceNode.innerHTML = "&nbsp;";
