@@ -1,8 +1,8 @@
 key = new Array();
 ignoredKeys = [37, 38, 39, 40];
 
-//serverAddress = "http://localhost:1024";
-serverAddress = "http://newtonweb.dyndns.org:1024";
+//serverAddress = "http://localhost:6338";
+serverAddress = "http://newtonweb.dyndns.org:6338";
 
 myClient = new Client();
 otherClients = [];
