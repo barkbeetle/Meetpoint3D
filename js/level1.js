@@ -37,6 +37,12 @@ $(document).ready(function()
 		{
 			key[event.which] = false;
 		});
+		$("#chat_input").focus();
+		$("#chat_input").keypress(function(event)
+		{
+			if(event.which == 13)
+				sendMessage();
+		});
 		
 		characterId = Math.floor(Math.random()*3);
 	}
