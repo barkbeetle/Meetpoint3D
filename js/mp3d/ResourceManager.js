@@ -76,7 +76,10 @@ ResourceManager.loadResource = function(name)
 				}
 			}
 		},
-		error: function(error){alert("error");}
+		error: function(error)
+		{
+			Mp3D.error(error.responseText);
+		}
 	});
 
 	/*$.get(ResourceManager.requests[name], function(data)
