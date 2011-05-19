@@ -1,8 +1,9 @@
 key = new Array();
 ignoredKeys = [37, 38, 39, 40];
 
-//serverAddress = "http://localhost:1024";
-serverAddress = "http://newtonweb.dyndns.org:1024";
+serverAddress = "http://localhost:1024";
+//serverAddress = "http://stud-ropelsan-0.zhaw.ch:1024";
+//serverAddress = "http://newtonweb.dyndns.org:1024";
 
 myClient = new Client();
 otherClients = [];

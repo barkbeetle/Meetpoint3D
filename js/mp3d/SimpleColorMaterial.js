@@ -105,7 +105,6 @@ SimpleColorMaterial.prototype.drawModel = function(model, mvMatrix)
     
     if(this.color)
     {
-    	Mp3D.gl.activeTexture(WebGLRenderingContext.TEXdTURE0);
     	Mp3D.gl.uniform3fv(SimpleColorMaterial.shaderProgram.color, this.color);
     }
 
