@@ -4,6 +4,6 @@
 	$password = "***";
 	$db  = "meetpoint3d";
 	
-	mysql_connect($host, $username, $password) or die('Could not connect to database.');
-	mysql_select_db($db) or die('Could not select database.');
+	mysql_connect($host, $username, $password);
+	mysql_select_db($db);
 ?>
