@@ -25,6 +25,8 @@
 		<div id="header"></div>
 		<div id="body">
 			<div id="navigation">
+				<a href="index.php?content=home">Home</a>
+				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 				<a href="index.php?content=project">The Project</a>
 				&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 				<a href="index.php?content=blog">Blog</a>
@@ -38,7 +40,10 @@
 					switch($_GET["content"])
 					{
 						case "":
-							include("project.php");
+							include("home.php");
+							break;
+						case "home":
+							include("home.php");
 							break;
 						case "project":
 							include("project.php");

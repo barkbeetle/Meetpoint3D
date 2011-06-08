@@ -111,7 +111,7 @@ function setupScene()
 	myClient.node = character1;
 	myClient.scale =  0.008;
 	myClient.xPosition = 0;
-	myClient.zPosition = 40;
+	myClient.zPosition = 0;
 	myClient.angle = 0;
 	
 	myClient.bubbleNode = bubble1;
@@ -159,6 +159,15 @@ function main()
 		myClient.move(-10*elapsed);
 	}
 	
+	if(myClient.xPosition > 48.8)
+		myClient.xPosition = 48.8;
+	if(myClient.xPosition < -48.8)
+		myClient.xPosition = -48.8;
+	if(myClient.zPosition > 48.8)
+		myClient.zPosition = 48.8;
+	if(myClient.zPosition < -48.8)
+		myClient.zPosition = -48.8;
+	
 	myClient.updateNode();
 	myClient.bubbleAngle += 90*elapsed;
 	
@@ -183,7 +192,6 @@ function joinGame(characterId)
 		dataType: "text",
 		success: function(data)
 		{
-			console.log("I am "+data);
 			myClient.clientId = data;
 			loadResources();
 		},

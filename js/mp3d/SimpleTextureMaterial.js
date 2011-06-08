@@ -1,6 +1,7 @@
 function SimpleTextureMaterial()
 {
 	this.texture = null;
+	this.ignoreLighting = false;
 }
 
 Mp3D.registerMaterialClass(SimpleTextureMaterial);
@@ -44,6 +45,8 @@ SimpleTextureMaterial.init = function()
     simpleTextureShaderProgram.lightAmbientColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightAmbientColor");
     simpleTextureShaderProgram.lightDiffuseColor = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "lightDiffuseColor");
     
+    simpleTextureShaderProgram.ignoreLighting = Mp3D.gl.getUniformLocation(simpleTextureShaderProgram, "ignoreLighting");
+    
     SimpleTextureMaterial.shaderProgram = simpleTextureShaderProgram;
 }
 
@@ -54,6 +57,11 @@ SimpleTextureMaterial.prototype.setTexture = function(filename)
 	var loadedTexture = this.texture;
 	this.texture.image.onload = function(){ Mp3D.handleLoadedTexture(loadedTexture); };
 	this.texture.image.src = filename;
+}
+
+SimpleTextureMaterial.prototype.setIgnoreLighting = function(ignoreLighting)
+{
+	this.ignoreLighting = ignoreLighting;
 }
 
 SimpleTextureMaterial.enable = function()
@@ -115,6 +123,7 @@ SimpleTextureMaterial.prototype.drawModel = function(model, mvMatrix)
     	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, this.texture);
     	Mp3D.gl.uniform1i(SimpleTextureMaterial.shaderProgram.textureSampler, 0);
     }
+	Mp3D.gl.uniform1i(SimpleTextureMaterial.shaderProgram.ignoreLighting, this.ignoreLighting);
 
  	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, model.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);
  	

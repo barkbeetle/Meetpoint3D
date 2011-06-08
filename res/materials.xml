@@ -35,6 +35,21 @@
 		<class name="SimpleTextureMaterial"/>
 		<attributes>
 			<string name="texture" value="res/models/level1/pavement1.png"/>
+			<boolean name="ignoreLighting" value="false"/>
+		</attributes>
+	</material>
+	<material name="Wall1">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/models/level1/wall1.png"/>
+			<boolean name="ignoreLighting" value="false"/>
+		</attributes>
+	</material>
+	<material name="Sky1">
+		<class name="SimpleTextureMaterial"/>
+		<attributes>
+			<string name="texture" value="res/models/level1/sky1.png"/>
+			<boolean name="ignoreLighting" value="true"/>
 		</attributes>
 	</material>
 

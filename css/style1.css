@@ -8,7 +8,7 @@ body
 
 p
 {
-	margin-bottom:30px;
+	margin-bottom:10px;
 }
 
 a:link{color:#0000B5; text-decoration:none;}
@@ -80,12 +80,29 @@ img
 {
 	font-size:10pt;
 	font-weight:bold;
+	margin-top:20px;
+	margin-bottom:10px;
 }
 
 .title2::before
 {
 	content:"➤ ";
   	display:inline;
+}
+
+.title3
+{
+	font-size:8pt;
+	font-weight:bold;
+	margin-top:20px;
+	margin-bottom:10px;
+}
+
+.title3::before
+{
+	content:"➤ ";
+  	display:inline;
+  	margin-left: 10px;
 }
 
 .error_title
@@ -113,7 +130,7 @@ img
 #chat
 {
 	font-size:10pt;
-	margin-top:-10px;
+	margin-top:10px;
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:0px;

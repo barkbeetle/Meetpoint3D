@@ -95,14 +95,14 @@ Mp3D.setupViewport = function()
 {
 	Mp3D.gl.viewport(0, 0, Mp3D.gl.viewportWidth, Mp3D.gl.viewportHeight);
 	Mp3D.gl.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
-	
+		
 	// model view matrix
 	Mp3D.mvMatrix = mat4.create();
 	mat4.identity(Mp3D.mvMatrix);
 	
 	// projection matrix
   	Mp3D.pMatrix = mat4.create();
-	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 10000.0, Mp3D.pMatrix);
+	mat4.perspective(45, Mp3D.gl.viewportWidth / Mp3D.gl.viewportHeight, 0.1, 200000.0, Mp3D.pMatrix);
 
 	// normal matrix
 	Mp3D.normalMatrix = mat3.create();
@@ -230,8 +230,9 @@ Mp3D.handleLoadedTexture = function(texture)
 	Mp3D.gl.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
 	Mp3D.gl.pixelStorei(WebGLRenderingContext.UNPACK_FLIP_Y_WEBGL, true);
 	Mp3D.gl.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0, WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, texture.image);
-	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MAG_FILTER, WebGLRenderingContext.NEAREST);
-	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MIN_FILTER, WebGLRenderingContext.NEAREST);
+	Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MAG_FILTER, WebGLRenderingContext.LINEAR);
+    Mp3D.gl.texParameteri(WebGLRenderingContext.TEXTURE_2D, WebGLRenderingContext.TEXTURE_MIN_FILTER, WebGLRenderingContext.LINEAR_MIPMAP_LINEAR);
+	Mp3D.gl.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
 }
 
 Mp3D.pushMV = function()

@@ -1,6 +1,7 @@
 function SimpleColorMaterial()
 {
 	this.color = null;
+	this.ignoreLighting = false;
 }
 
 Mp3D.registerMaterialClass(SimpleColorMaterial);
@@ -43,6 +44,8 @@ SimpleColorMaterial.init = function()
     simpleColorShaderProgram.lightAmbientColor = Mp3D.gl.getUniformLocation(simpleColorShaderProgram, "lightAmbientColor");
     simpleColorShaderProgram.lightDiffuseColor = Mp3D.gl.getUniformLocation(simpleColorShaderProgram, "lightDiffuseColor");
     
+    simpleColorShaderProgram.ignoreLighting = Mp3D.gl.getUniformLocation(simpleColorShaderProgram, "ignoreLighting");
+    
     SimpleColorMaterial.shaderProgram = simpleColorShaderProgram;
 }
 
@@ -53,6 +56,11 @@ SimpleColorMaterial.prototype.setColor = function(colorString)
 	var blue = parseInt(colorString.slice(4, 6), 16)/255;
 	
 	this.color = [red, green, blue];
+}
+
+SimpleColorMaterial.prototype.setIgnoreLighting = function(ignoreLighting)
+{
+	this.ignoreLighting = ignoreLighting;
 }
 
 SimpleColorMaterial.enable = function()
@@ -107,6 +115,7 @@ SimpleColorMaterial.prototype.drawModel = function(model, mvMatrix)
     {
     	Mp3D.gl.uniform3fv(SimpleColorMaterial.shaderProgram.color, this.color);
     }
+    Mp3D.gl.uniform1i(SimpleColorMaterial.shaderProgram.ignoreLighting, this.ignoreLighting);
 
  	Mp3D.gl.drawElements(WebGLRenderingContext.TRIANGLES, model.vertexIndexBuffer.numItems, WebGLRenderingContext.UNSIGNED_SHORT, 0);
  	
