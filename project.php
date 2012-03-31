@@ -1,7 +1,7 @@
 <div class="title">The Project</div>
 <div class="title2">Project Goal</div>
 <p>
-	Meetpoint3D startet as a school project where we had to create a website. Having heard about WebGL I wanted to try this technology and gain some experience in OpenGL and 3D design.
+	Meetpoint3D is a school project where we had to create a website. Having heard about WebGL I wanted to try this technology and gain some experience in OpenGL and 3D design.
 </p>
 
 <div class="title2">Components of a three-dimensional world</div>
@@ -38,7 +38,7 @@
 <div class="title3">Gameserver</div>
 <p>
 	To enable multiplayer interaction, I run a dedicated gameserver in my home network. It is written in Java and runs surprisingly stable ;-)<br/>
-	All it does is basically listening to incoming HTTP request, reading the information out of it and sending a response with the data requested. More details in the "Communication protocol" section.
+	All it does is listen to incoming HTTP request, reading the information out of it and sending a response with the data requested. More details in the "Communication protocol" section.
 </p>
 <p>
 	Meetpoint3D is not only a 3D-world you play alone in, you can interact with other players in real-time.
