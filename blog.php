@@ -4,8 +4,8 @@
 	include('dbconnect.php');
 
 	$sql = 'select * from blog order by date desc';
-	$result = mysql_query($sql);
-	while($row = mysql_fetch_array($result))
+	$result = $mysqli->query($sql);
+	while($row = $result->fetch_array())
 	{
 		$date = explode('-', $row['date']);
 		$year = $date[0];

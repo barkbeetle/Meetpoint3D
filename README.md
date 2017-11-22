@@ -1,12 +1,8 @@
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Meetpoint3D
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- newtonweb.dyndns.org/Meetpoint3D
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- copyright 2011 - Sandro Ropelato
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Meetpoint3D
 
-1) Setup
+Simple anonymous online chat room visualized with WebGL.
+
+### Setup
 
 Setting up Meetpoint3D is fairly easy. Just copy the code into a directory of your apache server with PHP support.
 

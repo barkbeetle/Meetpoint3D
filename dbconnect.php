@@ -4,6 +4,5 @@
 	$password = "mp3d";
 	$db  = "meetpoint3d";
 	
-	mysql_connect($host, $username, $password);
-	mysql_select_db($db);
+	$mysqli = mysqli_connect($host, $username, $password, $db);
 ?>
