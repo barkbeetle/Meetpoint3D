@@ -6,5 +6,5 @@ Simple anonymous online chat room visualized with WebGL.
 
 Setting up Meetpoint3D is fairly easy. Just copy the code into a directory of your apache server with PHP support.
 
-If you want to use a different game server than the one provided, change the serverAddress variable at the top of js/level1.js (see github.com/barkbeetle/Meepoint3DServer for more information about the game server)
+If you want to use a different game server than the one provided, change the serverAddress variable at the top of js/level1.js. See [github.com/sropelato/Meepoint3DServer](https://github.com/sropelato/Meepoint3DServer) for more information about the game server.
 
