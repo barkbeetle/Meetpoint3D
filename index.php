@@ -19,6 +19,8 @@
 		<script type="text/javascript" src="js/mp3d/SimpleColorMaterial.js"></script>
 		<script type="text/javascript" src="js/mp3d/SimpleTextureMaterial.js"></script>
 		<script type="text/javascript" src="js/mp3d/Client.js"></script>
+		<!--<script type="text/javascript" src="js/rotating_shapes.js"></script>-->
+		<!--<script type="text/javascript" src="js/rotating_turret.js"></script>-->
 		<script type="text/javascript" src="js/level1.js"></script>
 	</head>
 	<body>

@@ -18,10 +18,10 @@ varying vec3 lightedColor;
 void main(void)
 {
 	gl_Position = pMatrix * mvMatrix * vec4(vertexPosition, 1.0);
-	
+	textureCoord = vertexTexCoord;
+
 	if(!ignoreLighting)
 	{
-		textureCoord = vertexTexCoord;
 		vec3 transformedNormal = normalize(nMatrix * vertexNormal);
 		
 		vec3 direction = normalize(lightDirection * -1.0);
