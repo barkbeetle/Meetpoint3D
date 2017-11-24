@@ -1,8 +1,8 @@
 <?php
-	$host = "newtonweb.dyndns.org:3306";
+	$host = "newtonweb.dyndns.org";
 	$username = "meetpoint3d";
 	$password = "mp3d";
 	$db  = "meetpoint3d";
 	
-	$mysqli = mysqli_connect($host, $username, $password, $db);
+	$mysqli = new mysqli($host, $username, $password, $db);
 ?>
