@@ -2,7 +2,7 @@ key = new Array();
 ignoredKeys = [37, 38, 39, 40];
 
 //serverAddress = "http://localhost:63387";
-serverAddress = "http://newtonweb.dyndns.org:63387";
+serverAddress = "https://mp3d.newtonweb.net";
 
 myClient = new Client();
 otherClients = [];

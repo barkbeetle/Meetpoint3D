@@ -1,5 +1,5 @@
 <?php
-	$host = "newtonweb.dyndns.org";
+	$host = "newtonweb.net";
 	$username = "meetpoint3d";
 	$password = "mp3d";
 	$db  = "meetpoint3d";
